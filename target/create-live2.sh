@@ -1,2 +1,0 @@
-# These are the commands used to create live2
-/home/ataylor/projects/artemis-arquillian/target/apache-artemis-2.5.0-SNAPSHOT/bin/artemis create --allow-anonymous --silent --force --no-web --user guest --password guest --role guest --port-offset 100 --data ./data --allow-anonymous --replicated --clustered --message-load-balancing ON_DEMAND --no-autotune --verbose --aio /home/ataylor/projects/artemis-arquillian/target/live2 
