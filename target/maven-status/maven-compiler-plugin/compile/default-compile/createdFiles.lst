@@ -1,0 +1,14 @@
+org/apache/activemq/artemis/arquillian/ArtemisProtocolDeploymentPackager.class
+org/apache/activemq/artemis/arquillian/ArtemisProtocol.class
+org/apache/activemq/artemis/arquillian/ArtemisContainerControllerCreator.class
+org/apache/activemq/artemis/arquillian/ArtemisControllerProvider.class
+org/apache/activemq/artemis/arquillian/ArtemisDeployableContainer.class
+org/apache/activemq/artemis/arquillian/ArtemisCommandService.class
+org/apache/activemq/artemis/arquillian/Processor.class
+org/apache/activemq/artemis/arquillian/ArtemisLoadableExtension.class
+org/apache/activemq/artemis/arquillian/ArtemisProtocolConfiguration.class
+org/apache/activemq/artemis/arquillian/ArtemisContainerController.class
+org/apache/activemq/artemis/arquillian/ArtemisContainerConfiguration.class
+org/apache/activemq/artemis/arquillian/AbstractCommand.class
+org/apache/activemq/artemis/arquillian/ArtemisContext.class
+org/apache/activemq/artemis/arquillian/KillContainerCommand.class

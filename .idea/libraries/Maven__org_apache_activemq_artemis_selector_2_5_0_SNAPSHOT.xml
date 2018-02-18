@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.activemq:artemis-selector:2.5.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-selector/2.5.0-SNAPSHOT/artemis-selector-2.5.0-20180214.173910-153.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-selector/2.5.0-SNAPSHOT/artemis-selector-2.5.0-20180214.173910-153-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-selector/2.5.0-SNAPSHOT/artemis-selector-2.5.0-20180214.173910-153-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
