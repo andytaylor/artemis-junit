@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: org.apache.activemq:artemis-service-extensions:2.5.0-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-service-extensions/2.5.0-SNAPSHOT/artemis-service-extensions-2.5.0-20180214.174221-149.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-service-extensions/2.5.0-SNAPSHOT/artemis-service-extensions-2.5.0-20180220.085136-153.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-service-extensions/2.5.0-SNAPSHOT/artemis-service-extensions-2.5.0-20180214.174221-149-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-service-extensions/2.5.0-SNAPSHOT/artemis-service-extensions-2.5.0-20180220.085136-153-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-service-extensions/2.5.0-SNAPSHOT/artemis-service-extensions-2.5.0-20180214.174221-149-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/artemis-service-extensions/2.5.0-SNAPSHOT/artemis-service-extensions-2.5.0-20180220.085136-153-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

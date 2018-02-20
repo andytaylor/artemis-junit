@@ -28,7 +28,6 @@ public class ArtemisLoadableExtension implements LoadableExtension {
         builder.service(DeployableContainer.class, ArtemisDeployableContainer.class);
         builder.service(Protocol.class, ArtemisProtocol.class);
         builder.service(ResourceProvider.class, ArtemisControllerProvider.class);
-        builder.service(CommandService.class, ArtemisCommandService.class);
         builder.observer(ArtemisContainerControllerCreator.class);
     }
 }
