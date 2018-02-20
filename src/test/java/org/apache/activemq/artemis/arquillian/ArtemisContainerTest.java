@@ -16,47 +16,31 @@
  */
 package org.apache.activemq.artemis.arquillian;
 
-import org.jboss.arquillian.config.descriptor.api.ArquillianDescriptor;
-import org.jboss.arquillian.container.test.api.ContainerController;
-import org.jboss.arquillian.container.test.api.Deployment;
+import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
+import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
+import org.apache.activemq.artemis.api.core.client.ServerLocator;
 import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.core.api.annotation.Observes;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 public class ArtemisContainerTest {
 
-   private ArquillianDescriptor arquillianDescriptor;
-
-   /**
-    * Sets ArquillianDescriptor via ARQ LoadableExtension
-    *
-    * @param event      ARQ event
-    * @param descriptor instance of the description
-    */
-   @SuppressWarnings("unused")
-   public void setArquillianDescriptor(@Observes BeforeSuite event, ArquillianDescriptor descriptor) {
-       arquillianDescriptor = descriptor;
-   }
-
    @ArquillianResource
    protected ArtemisContainerController controller;
 
-   @Deployment
-   public static JavaArchive createDeployment() {
-       return ShrinkWrap.create(JavaArchive.class).addAsResource("standalone/broker.xml");
-   }
-
    @Test
    @RunAsClient
-   public void should_create_greeting() {
-       controller.kill("node-1");
+   public void shouldWaitForBroker() throws Exception {
+       controller.startAndWait("standalone", 30);
+       String standalone = controller.getCoreConnectUrl("standalone");
+       try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(standalone)) {
+           ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
+           Assert.assertNotNull(sessionFactory);
+       }
+
    }
 }

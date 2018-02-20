@@ -30,11 +30,11 @@ public class ArtemisProtocol implements Protocol<ArtemisProtocolConfiguration> {
    }
 
    public ProtocolDescription getDescription() {
-      return new ProtocolDescription("artemis 2.0");
+      return new ProtocolDescription("artemis local");
    }
 
    public DeploymentPackager getPackager() {
-      return new ArtemisProtocolDeploymentPackager();
+      return null;
    }
 
    public ContainerMethodExecutor getExecutor(ArtemisProtocolConfiguration artemisProtocolConfiguration, ProtocolMetaData protocolMetaData, CommandCallback commandCallback) {

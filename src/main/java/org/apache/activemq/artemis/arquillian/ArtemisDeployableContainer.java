@@ -16,7 +16,11 @@
  */
 package org.apache.activemq.artemis.arquillian;
 
+import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.cli.process.ProcessBuilder;
+import org.apache.activemq.artemis.core.config.Configuration;
+import org.apache.activemq.artemis.core.config.impl.FileConfiguration;
+import org.apache.activemq.artemis.core.deployers.impl.FileConfigurationParser;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
@@ -30,11 +34,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Map;
+import java.util.Set;
 
 public class ArtemisDeployableContainer implements DeployableContainer<ArtemisContainerConfiguration> {
 
    private Process broker;
    private ArtemisContainerConfiguration containerConfiguration;
+   private Configuration configuration;
+   private String coreConnectUrl;
 
    public ArtemisDeployableContainer() {
       super();
@@ -58,11 +66,11 @@ public class ArtemisDeployableContainer implements DeployableContainer<ArtemisCo
    }
 
    public void start() throws LifecycleException {
-      File absoluteHome = new File(containerConfiguration.getArtemisHome());
+      FileConfigurationParser parser = new FileConfigurationParser();
       try {
-         broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "run");
+         configuration = parser.parseMainConfig(new FileInputStream(new File(containerConfiguration.getArtemisHome() + "/etc/broker.xml")));
       } catch (Exception e) {
-         throw new LifecycleException("unable to start broker", e);
+         throw new LifecycleException(e.getMessage(), e.getCause());
       }
    }
 
@@ -71,7 +79,7 @@ public class ArtemisDeployableContainer implements DeployableContainer<ArtemisCo
    }
 
    public ProtocolDescription getDefaultProtocol() {
-      return new ProtocolDescription("artemis 2.0");
+      return new ProtocolDescription("artemis local");
    }
 
    public void deploy(Descriptor descriptor) throws DeploymentException {
@@ -87,7 +95,7 @@ public class ArtemisDeployableContainer implements DeployableContainer<ArtemisCo
    }
 
    public ProtocolMetaData deploy(Archive archive) throws DeploymentException {
-      return new ProtocolMetaData().addContext(new ArtemisContext("localhost"));
+      return null;
    }
 
    public void kill() {
@@ -115,5 +123,46 @@ public class ArtemisDeployableContainer implements DeployableContainer<ArtemisCo
             destination.close();
          }
       }
+   }
+
+   public void startBroker() {
+      File absoluteHome = new File(containerConfiguration.getArtemisHome());
+      try {
+         broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "run");
+      } catch (Exception e) {
+         throw new IllegalStateException("unable to start broker", e);
+      }
+   }
+
+   public String getCoreConnectUrl() {
+      if (coreConnectUrl == null) {
+         String host = null;
+         String port = null;
+         Set<TransportConfiguration> acceptorConfigurations = configuration.getAcceptorConfigurations();
+         for (TransportConfiguration acceptorConfiguration : acceptorConfigurations) {
+            String factoryClassName = acceptorConfiguration.getFactoryClassName();
+            if (factoryClassName.equals("org.apache.activemq.artemis.core.remoting.impl.netty.NettyAcceptorFactory")) {
+               Map<String, Object> params = acceptorConfiguration.getParams();
+               for (Object key : params.keySet()) {
+                  if (key.equals("protocols")) {
+                     String protocols = (String) params.get(key);
+                     if (protocols.contains("CORE")) {
+                        host = (String) params.get("host");
+                        port = (String) params.get("port");
+                        break;
+                     }
+                  }
+               }
+            }
+         }
+         if (host == null || host.equals("0.0.0.0")) {
+            host = "localhost";
+         }
+         if (port == null) {
+            port = "61616";
+         }
+         coreConnectUrl = "tcp://" + host + ":" + port;
+      }
+      return coreConnectUrl;
    }
 }

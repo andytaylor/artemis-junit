@@ -17,6 +17,9 @@
 package org.apache.activemq.artemis.arquillian;
 
 
+import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
+import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
+import org.apache.activemq.artemis.api.core.client.ServerLocator;
 import org.jboss.arquillian.container.spi.Container;
 import org.jboss.arquillian.container.spi.ContainerRegistry;
 import org.jboss.arquillian.container.spi.client.deployment.TargetDescription;
@@ -31,7 +34,36 @@ public class ArtemisContainerController {
    @Inject
    private Instance<ContainerRegistry> containerRegistry;
 
+   public void start(String containerQualifier) {
+      ArtemisDeployableContainer deployableContainer = getArtemisDeployableContainer(containerQualifier);
+      deployableContainer.startBroker();
+      //event.fire(new KillContainer(container));
+   }
+
+   public void startAndWait(String containerQualifier, int timeout) throws Exception {
+      ArtemisDeployableContainer deployableContainer = getArtemisDeployableContainer(containerQualifier);
+      deployableContainer.startBroker();
+      String coreConnectUrl = deployableContainer.getCoreConnectUrl();
+      ServerLocator serverLocator = ActiveMQClient.createServerLocator(coreConnectUrl);
+      serverLocator.setInitialConnectAttempts(timeout);
+      serverLocator.setRetryInterval(1000);
+      ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
+      System.out.println("coreConnectUrl = " + coreConnectUrl);
+      //event.fire(new KillContainer(container));
+   }
+
    public void kill(String containerQualifier) {
+      ArtemisDeployableContainer deployableContainer = getArtemisDeployableContainer(containerQualifier);
+      deployableContainer.kill();
+      //event.fire(new KillContainer(container));
+   }
+
+   public String getCoreConnectUrl(String containerQualifier) {
+      ArtemisDeployableContainer deployableContainer = getArtemisDeployableContainer(containerQualifier);
+      return deployableContainer.getCoreConnectUrl();
+   }
+
+   private ArtemisDeployableContainer getArtemisDeployableContainer(String containerQualifier) {
       ContainerRegistry registry = containerRegistry.get();
       if (registry == null) {
          throw new IllegalArgumentException("No container registry in context");
@@ -42,8 +74,7 @@ public class ArtemisContainerController {
       if (container == null) {
          throw new IllegalArgumentException("No container in Registry named " + containerQualifier);
       }
-      ArtemisDeployableContainer deployableContainer = (ArtemisDeployableContainer) container.getDeployableContainer();
-      deployableContainer.kill();
-      //event.fire(new KillContainer(container));
+      return (ArtemisDeployableContainer) container.getDeployableContainer();
    }
+
 }
