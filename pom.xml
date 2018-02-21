@@ -6,6 +6,7 @@
 
     <groupId>org.apache.activemq.artemis</groupId>
     <artifactId>artemis-arquillian</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -26,6 +27,14 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <modules>
+        <module>artemis-bootstrapper</module>
+        <module>artemis-common</module>
+        <module>artemis-local-container</module>
+        <module>artemis-remote-container</module>
+        <module>artemis-test</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -70,23 +79,12 @@
             <groupId>org.jboss.arquillian.container</groupId>
             <artifactId>arquillian-container-test-spi</artifactId>
         </dependency>
-        <!--
-         Test
-         -->
 
         <dependency>
             <groupId>org.jboss.shrinkwrap</groupId>
             <artifactId>shrinkwrap-impl-base</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>
-          <groupId>org.jboss.arquillian</groupId>
-          <artifactId>arquillian-impl-base</artifactId>
-           <version>${version.arquillian_core}</version>
-          &lt;!&ndash;<version>${project.version}</version>&ndash;&gt;
-          <scope>test</scope>
-        </dependency>-->
 
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
@@ -100,169 +98,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>artemis-cli</artifactId>
             <version>${version.artemis}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.apache.activemq</groupId>
-                                    <artifactId>apache-artemis</artifactId>
-                                    <classifier>bin</classifier>
-                                    <version>${version.artemis}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>artemis-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>create</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <host>localhost</host>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/standalone</instance>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>createlive1</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/live1</instance>
-                            <clustered>true</clustered>
-                            <replicated>true</replicated>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>createlive2</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/live2</instance>
-                            <clustered>true</clustered>
-                            <replicated>true</replicated>
-                            <portOffset>100</portOffset>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>createlive3</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/live3</instance>
-                            <clustered>true</clustered>
-                            <replicated>true</replicated>
-                            <portOffset>200</portOffset>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>createReplica1</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/replica1</instance>
-                            <clustered>true</clustered>
-                            <replicated>true</replicated>
-                            <slave></slave>
-                            <portOffset>300</portOffset>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>createReplica2</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/replica2</instance>
-                            <clustered>true</clustered>
-                            <replicated>true</replicated>
-                            <slave></slave>
-                            <portOffset>400</portOffset>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>createReplica3</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                            <instance>target/replica3</instance>
-                            <clustered>true</clustered>
-                            <replicated>true</replicated>
-                            <slave></slave>
-                            <portOffset>500</portOffset>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>arquillian.xml</name>
-                            <value>arquillian.xml</value>
-                        </property>
-                    </systemProperties>
-                    <argLine></argLine>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 
 </project>
