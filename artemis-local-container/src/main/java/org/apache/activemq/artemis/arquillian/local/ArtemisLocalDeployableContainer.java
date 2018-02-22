@@ -99,7 +99,17 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
       broker.destroy();
    }
 
-   public static void copyFile(File sourceFile, File destFile) throws IOException {
+    @Override
+    public void stopBroker() {
+       File absoluteHome = new File(containerConfiguration.getArtemisHome());
+       try {
+          broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "stop");
+       } catch (Exception e) {
+          throw new IllegalStateException("unable to start broker", e);
+       }
+    }
+
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
       if(!destFile.exists()) {
          destFile.createNewFile();
       }

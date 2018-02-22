@@ -7,6 +7,9 @@ public class ArtemisRemoteContainerConfiguration implements ContainerConfigurati
     private String host;
 
     private String port;
+    private String bootstrapHost;
+    private String bootstrapPort;
+
     @Override
     public void validate() throws ConfigurationException {
 
@@ -26,5 +29,21 @@ public class ArtemisRemoteContainerConfiguration implements ContainerConfigurati
 
     public void setPort(String port) {
         this.port = port;
+    }
+
+    public String getBootstrapHost() {
+        return bootstrapHost;
+    }
+
+    public void setBootstrapHost(String bootStrapHost) {
+        this.bootstrapHost = bootStrapHost;
+    }
+
+    public String getBootstrapPort() {
+        return bootstrapPort;
+    }
+
+    public void setBootstrapPort(String bootStrapPort) {
+        this.bootstrapPort = bootStrapPort;
     }
 }

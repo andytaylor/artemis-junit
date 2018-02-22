@@ -6,4 +6,6 @@ public interface ArtemisDeployableContainer {
     String getCoreConnectUrl();
 
     void kill();
+
+    void stopBroker();
 }

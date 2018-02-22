@@ -77,4 +77,8 @@ public class ArtemisContainerController {
       return (ArtemisDeployableContainer) container.getDeployableContainer();
    }
 
+   public void stop(String containerQualifier) {
+      ArtemisDeployableContainer artemisDeployableContainer = getArtemisDeployableContainer(containerQualifier);
+      artemisDeployableContainer.stopBroker();
+   }
 }

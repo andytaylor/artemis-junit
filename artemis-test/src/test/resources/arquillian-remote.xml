@@ -4,50 +4,12 @@
 <defaultProtocol type="artemis remote"/>
     <container qualifier="standalone" default="true" >
         <configuration>
-            <property name="host">${live1.host}</property>
-            <property name="port">${live1.port}</property>
+            <property name="bootstrapHost">${bootstrap.host}</property>
+            <property name="bootstrapPort">${bootstrap.port}</property>
+            <property name="host">${standalone.host}</property>
+            <property name="port">${standalone.port}</property>
             <property name="startTimeout">30000</property>
         </configuration>
     </container>
-
-    <!--<container qualifier="live2" default="true" >
-        <configuration>
-            <property name="host">${live2.host}</property>
-            <property name="port">${live2.port}</property>
-            <property name="startTimeout">30000</property>
-        </configuration>
-    </container>
-
-    <container qualifier="live3" default="true" >
-        <configuration>
-            <property name="host">${live3.host}</property>
-            <property name="port">${live3.port}</property>
-            <property name="startTimeout">30000</property>
-        </configuration>
-    </container>
-
-    <container qualifier="replica1" default="true" >
-        <configuration>
-            <property name="host">${replica1.host}</property>
-            <property name="port">${replica1.port}</property>
-            <property name="startTimeout">30000</property>
-        </configuration>
-    </container>
-
-    <container qualifier="replica2" default="true" >
-        <configuration>
-            <property name="host">${replica2.host}</property>
-            <property name="port">${replica2.port}</property>
-            <property name="startTimeout">30000</property>
-        </configuration>
-    </container>
-
-    <container qualifier="replica3" default="true" >
-        <configuration>
-            <property name="host">${replica3.host}</property>
-            <property name="port">${replica3.port}</property>
-            <property name="startTimeout">30000</property>
-        </configuration>
-    </container>-->
 </arquillian>
 

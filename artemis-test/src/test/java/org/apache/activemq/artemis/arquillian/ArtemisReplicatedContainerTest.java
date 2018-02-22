@@ -19,6 +19,7 @@ package org.apache.activemq.artemis.arquillian;
 import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
 import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
+import org.apache.activemq.artemis.arquillian.categories.Replicated6Node;
 import org.apache.activemq.artemis.arquillian.categories.Standalone;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -29,8 +30,8 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-@Category(Standalone.class)
-public class ArtemisContainerTest {
+@Category(Replicated6Node.class)
+public class ArtemisReplicatedContainerTest {
 
    @ArquillianResource
    protected ArtemisContainerController controller;
@@ -38,12 +39,33 @@ public class ArtemisContainerTest {
    @Test
    @RunAsClient
    public void shouldWaitForBroker() throws Exception {
-       controller.startAndWait("standalone", 30);
-       String standalone = controller.getCoreConnectUrl("standalone");
-       try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(standalone)) {
+       controller.startAndWait("live1", 30);
+       controller.startAndWait("live2", 30);
+       controller.startAndWait("live3", 30);
+       controller.startAndWait("replica1", 30);
+       controller.startAndWait("replica2", 30);
+       controller.startAndWait("replica3", 30);
+       String live1 = controller.getCoreConnectUrl("live1");
+       String live2 = controller.getCoreConnectUrl("live2");
+       String live3 = controller.getCoreConnectUrl("live3");
+       try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(live1)) {
            ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
            Assert.assertNotNull(sessionFactory);
        }
-       controller.stop("standalone");
+       try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(live2)) {
+           ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
+           Assert.assertNotNull(sessionFactory);
+       }
+       try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(live3)) {
+           ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
+           Assert.assertNotNull(sessionFactory);
+       }
+       controller.stop("replica1");
+       controller.stop("replica2");
+       controller.stop("replica3");
+
+       controller.stop("live1");
+       controller.stop("live2");
+       controller.stop("live3");
    }
 }

@@ -18,49 +18,26 @@ import java.net.URL;
 
 public class ArtemisRemoteDeployableContainer implements DeployableContainer<ArtemisRemoteContainerConfiguration>, ArtemisDeployableContainer {
 
+    private ArtemisRemoteContainerConfiguration artemisRemoteContainerConfiguration;
+    private String baseURL;
+
     public void startBroker() {
-        try {
-
-            URL url = new URL("http://localhost:8080/RESTfulExample/json/product/get");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
-            }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream())));
-
-            String output;
-            System.out.println("Output from Server .... \n");
-            while ((output = br.readLine()) != null) {
-                System.out.println(output);
-            }
-
-            conn.disconnect();
-
-        } catch (MalformedURLException e) {
-
-            e.printStackTrace();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
+        execute("start");
     }
 
     @Override
     public String getCoreConnectUrl() {
-        return null;
+        return "tcp://" + artemisRemoteContainerConfiguration.getHost() + ":" + artemisRemoteContainerConfiguration.getPort();
     }
 
     @Override
     public void kill() {
+        execute("kill");
+    }
 
+    @Override
+    public void stopBroker() {
+        execute("stop");
     }
 
     @Override
@@ -70,7 +47,7 @@ public class ArtemisRemoteDeployableContainer implements DeployableContainer<Art
 
     @Override
     public void setup(ArtemisRemoteContainerConfiguration artemisRemoteContainerConfiguration) {
-
+        this.artemisRemoteContainerConfiguration = artemisRemoteContainerConfiguration;
     }
 
     @Override
@@ -106,5 +83,46 @@ public class ArtemisRemoteDeployableContainer implements DeployableContainer<Art
     @Override
     public void undeploy(Descriptor descriptor) throws DeploymentException {
 
+    }
+
+    private void execute(String target) {
+        try {
+
+            URL url = getURL(target);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+          //  conn.setRequestProperty("Accept", "application/text");
+
+            if (conn.getResponseCode() != 200) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                    (conn.getInputStream())));
+
+                String output;
+                System.out.println("Output from Server .... \n");
+                while ((output = br.readLine()) != null) {
+                    System.out.println(output);
+                }
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + conn.getResponseCode());
+            }
+            conn.disconnect();
+
+        } catch (MalformedURLException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+    }
+    private URL getURL(String target) throws MalformedURLException {
+        if (baseURL == null) {
+            String host = artemisRemoteContainerConfiguration.getBootstrapHost();
+            String port = artemisRemoteContainerConfiguration.getBootstrapPort();
+            baseURL = "http://" + host + ":" + port + "/artemis/";
+        }
+        return new URL(baseURL + target);
     }
 }
