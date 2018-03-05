@@ -24,22 +24,26 @@ The container protocol is configured in the arquillian.xml file via the followin
 
 There are 2 sets of tests that can be run to test this, the test Category standalone can be run via:
 
-```
-    mvn clean package -Pstandalone-local 
-```
+    $ mvn clean package -Pstandalone-local 
 
 which is configured via the arquillian.xml file.
 
 The test Category Replicated6Node which starts 3 pairs of replicated brokers can be run via:
 
-```
-    mvn clean package -Preplicated-local 
-```
+    $ mvn clean package -Preplicated-local 
+
 
 which is configured via the arquillian6nodereplicated.xml file.
 
 ## Artemis Remote Container
 
-todo  
+The Artemis Remote container will connect and control a broker on a remote machine, for this to work you will need to 
+deploy the artemis bootstrapper on the same machine as the broker and start it with the correct configuration. you do this via:
+
+    $ java -DARTEMIS_HOME=/home/ataylor/devtools/artemis-profiles/live -jar artemis-bootstrapper/target/artemis-bootstrapper-swarm.jar
+    
+The ARTEMIS_HOME property should point to an instance of the broker on the target machine.
+
+You can then run the following    
 
 ## Test Suite

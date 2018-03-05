@@ -35,6 +35,7 @@
         <module>artemis-common</module>
         <module>artemis-local-container</module>
         <module>artemis-remote-container</module>
+        <module>artemis-docker-container</module>
         <module>artemis-test</module>
     </modules>
 

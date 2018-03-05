@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.com/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+    <defaultProtocol type="artemis docker"/>
+    <group qualifier="replicated" default="true">
+        <container qualifier="live1">
+            <configuration>
+                <property name="dockerHost">${docker.host}</property>
+                <property name="imageName">${image.name}</property>
+                <property name="containerName">${live1.container.name}</property>
+                <property name="containerEnv">${live.containerEnv}</property>
+                <property name="containerLogs">${container.logs}</property>
+            </configuration>
+        </container>
+        <container qualifier="live2">
+            <configuration>
+                <property name="dockerHost">${docker.host}</property>
+                <property name="imageName">${image.name}</property>
+                <property name="containerName">${live2.container.name}</property>
+                <property name="containerEnv">${live.containerEnv}</property>
+                <property name="containerLogs">${container.logs}</property>
+            </configuration>
+        </container>
+        <container qualifier="live3">
+            <configuration>
+                <property name="dockerHost">${docker.host}</property>
+                <property name="imageName">${image.name}</property>
+                <property name="containerName">${live3.container.name}</property>
+                <property name="containerEnv">${live.containerEnv}</property>
+                <property name="containerLogs">${container.logs}</property>
+            </configuration>
+        </container>
+        <container qualifier="replica1">
+            <configuration>
+                <property name="dockerHost">${docker.host}</property>
+                <property name="imageName">${image.name}</property>
+                <property name="containerName">${backup1.container.name}</property>
+                <property name="containerEnv">${backup.containerEnv}</property>
+                <property name="containerLogs">${container.logs}</property>
+            </configuration>
+        </container>
+        <container qualifier="replica2">
+            <configuration>
+                <property name="dockerHost">${docker.host}</property>
+                <property name="imageName">${image.name}</property>
+                <property name="containerName">${backup2.container.name}</property>
+                <property name="containerEnv">${backup.containerEnv}</property>
+                <property name="containerLogs">${container.logs}</property>
+            </configuration>
+        </container>
+        <container qualifier="replica3">
+            <configuration>
+                <property name="dockerHost">${docker.host}</property>
+                <property name="imageName">${image.name}</property>
+                <property name="containerName">${backup3.container.name}</property>
+                <property name="containerEnv">${backup.containerEnv}</property>
+                <property name="containerLogs">${container.logs}</property>
+            </configuration>
+        </container>
+    </group>
+</arquillian>
+

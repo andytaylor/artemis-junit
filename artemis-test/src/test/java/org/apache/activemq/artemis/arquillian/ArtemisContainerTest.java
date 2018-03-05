@@ -17,13 +17,16 @@
 package org.apache.activemq.artemis.arquillian;
 
 import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
+import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
 import org.apache.activemq.artemis.arquillian.categories.Standalone;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -35,15 +38,23 @@ public class ArtemisContainerTest {
    @ArquillianResource
    protected ArtemisContainerController controller;
 
+   @Before
+   public void startBroker() throws Exception {
+       controller.startAndWait("standalone", 30);
+   }
+
+   @After
+   public void stopBroker() {
+        controller.stop("standalone");
+   }
+
    @Test
    @RunAsClient
    public void shouldWaitForBroker() throws Exception {
-       controller.startAndWait("standalone", 30);
        String standalone = controller.getCoreConnectUrl("standalone");
        try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(standalone)) {
            ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
            Assert.assertNotNull(sessionFactory);
        }
-       controller.stop("standalone");
    }
 }
