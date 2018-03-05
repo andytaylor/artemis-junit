@@ -40,7 +40,8 @@ public class ArtemisContainerTest {
 
    @Before
    public void startBroker() throws Exception {
-       controller.startAndWait("standalone", 30);
+       BrokerFuture standalone = controller.start("standalone");
+       Assert.assertTrue(standalone.awaitBrokerStart(30000));
    }
 
    @After

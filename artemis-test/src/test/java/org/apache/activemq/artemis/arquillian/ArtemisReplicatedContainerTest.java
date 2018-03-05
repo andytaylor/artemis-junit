@@ -39,17 +39,20 @@ public class ArtemisReplicatedContainerTest {
    protected ArtemisContainerController controller;
 
     @Before
-    public void startBroker() throws Exception {
-        controller.startAndWait("live1", 30);
-        controller.startAndWait("live2", 30);
-        controller.startAndWait("live3", 30);
+    public void startBrokers() throws Exception {
+        BrokerFuture live1 = controller.start("live1");
+        BrokerFuture live2 = controller.start("live2");
+        BrokerFuture live3 = controller.start("live3");
         controller.start("replica1");
         controller.start("replica2");
         controller.start("replica3");
+        Assert.assertTrue(live1.awaitBrokerStart(30000));
+        Assert.assertTrue(live2.awaitBrokerStart(30000));
+        Assert.assertTrue(live3.awaitBrokerStart(30000));
     }
 
     @After
-    public void stopBroker() {
+    public void stopBrokers() {
         controller.stop("replica1");
         controller.stop("replica2");
         controller.stop("replica3");
