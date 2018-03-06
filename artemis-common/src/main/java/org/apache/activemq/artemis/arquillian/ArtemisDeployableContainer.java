@@ -1,7 +1,7 @@
 package org.apache.activemq.artemis.arquillian;
 
 public interface ArtemisDeployableContainer {
-    void startBroker();
+    void startBroker(boolean clean);
 
     String getCoreConnectUrl();
 

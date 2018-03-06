@@ -40,12 +40,12 @@ public class ArtemisReplicatedContainerTest {
 
     @Before
     public void startBrokers() throws Exception {
-        BrokerFuture live1 = controller.start("live1");
-        BrokerFuture live2 = controller.start("live2");
-        BrokerFuture live3 = controller.start("live3");
-        controller.start("replica1");
-        controller.start("replica2");
-        controller.start("replica3");
+        BrokerFuture live1 = controller.start("live1", true);
+        BrokerFuture live2 = controller.start("live2", true);
+        BrokerFuture live3 = controller.start("live3", true);
+        controller.start("replica1", true);
+        controller.start("replica2", true);
+        controller.start("replica3", true);
         Assert.assertTrue(live1.awaitBrokerStart(30000));
         Assert.assertTrue(live2.awaitBrokerStart(30000));
         Assert.assertTrue(live3.awaitBrokerStart(30000));

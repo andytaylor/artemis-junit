@@ -31,9 +31,9 @@ public class ArtemisContainerController {
    @Inject
    private Instance<ContainerRegistry> containerRegistry;
 
-   public BrokerFuture start(String containerQualifier) {
+   public BrokerFuture start(String containerQualifier, boolean clean) {
       ArtemisDeployableContainer deployableContainer = getArtemisDeployableContainer(containerQualifier);
-      deployableContainer.startBroker();
+      deployableContainer.startBroker(clean);
       return timeout -> {
          try {
             String coreConnectUrl = deployableContainer.getCoreConnectUrl();

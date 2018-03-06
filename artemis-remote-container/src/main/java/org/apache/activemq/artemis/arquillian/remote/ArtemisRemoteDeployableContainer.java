@@ -21,7 +21,8 @@ public class ArtemisRemoteDeployableContainer implements DeployableContainer<Art
     private ArtemisRemoteContainerConfiguration artemisRemoteContainerConfiguration;
     private String baseURL;
 
-    public void startBroker() {
+    public void startBroker(boolean clean) {
+        //todo add clean data dirs
         execute("start");
     }
 

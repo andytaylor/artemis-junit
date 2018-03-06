@@ -34,6 +34,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Map;
 import java.util.Set;
 
@@ -132,9 +134,26 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
       }
    }
 
-   public void startBroker() {
+   public void startBroker(boolean clean) {
       File absoluteHome = new File(containerConfiguration.getArtemisHome());
       try {
+         if (clean) {
+            Path dataDir = Paths.get(containerConfiguration.getArtemisHome() + "/data");
+
+            Files.walkFileTree(dataDir, new SimpleFileVisitor<Path>() {
+               @Override
+               public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                  Files.delete(file);
+                  return FileVisitResult.CONTINUE;
+               }
+
+               @Override
+               public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                  Files.delete(dir);
+                  return FileVisitResult.CONTINUE;
+               }
+            });
+         }
          broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "run");
       } catch (Exception e) {
          throw new IllegalStateException("unable to start broker", e);

@@ -37,12 +37,20 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
 
     private DockerClient dockerClient;
 
-    public void startBroker() {
-        Container target = getContainer();
-        if (target.getStatus().startsWith("Up")) {
-            return;
+    public void startBroker(boolean clean) {
+        if (clean) {
+            stopAndDeleteContainer();
+            CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(configuration.getImageName())
+                    .withName(configuration.getContainerName());
+            if (configuration.getContainerEnv() != null && configuration.getContainerEnv().length() > 0) {
+                String[] strings = configuration.getContainerEnv().split(",");
+                createContainerCmd.withEnv(strings);
+            }
+            createContainerCmd.exec();
+            dockerClient.startContainerCmd(configuration.getContainerName()).exec();
+        } else {
+            dockerClient.startContainerCmd(configuration.getContainerName()).exec();
         }
-        dockerClient.startContainerCmd(configuration.getContainerName()).exec();
     }
 
 
@@ -108,18 +116,6 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
             dockerClient = DockerClientBuilder.getInstance(config)
                     .withDockerCmdExecFactory(dockerCmdExecFactory)
                     .build();
-
-            InfoCmd infoCmd = dockerClient.infoCmd();
-            Info info = infoCmd.exec();
-
-            CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(configuration.getImageName())
-                    .withName(configuration.getContainerName());
-            if (configuration.getContainerEnv() != null && configuration.getContainerEnv().length() > 0) {
-                String[] strings = configuration.getContainerEnv().split(",");
-                createContainerCmd.withEnv(strings);
-            }
-            createContainerCmd.exec();
-
         } catch (NotFoundException e) {
             throw new LifecycleException("The container image is not available: " + configuration.getImageName());
         } catch (ConflictException e) {
@@ -159,7 +155,7 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
                 e.printStackTrace();
             }
         }
-        dockerClient.removeContainerCmd(configuration.getContainerName()).exec();
+        stopAndDeleteContainer();
         System.out.println("*************** stopped container " + configuration.getContainerName() + " ******************");
     }
 
@@ -208,6 +204,26 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
         return target;
     }
 
+    private void stopAndDeleteContainer() {
+        List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
+        Container target = null;
+        for (Container container : containers) {
+            String[] names = container.getNames();
+            for (String name : names) {
+                if(name.endsWith(configuration.getContainerName())) {
+                    target = container;
+                    break;
+                }
+            }
+        }
+        if (target != null) {
+            if (target.getStatus().startsWith("Up")) {
+                dockerClient.stopContainerCmd(configuration.getContainerName()).exec();
+            }
+            dockerClient.removeContainerCmd(configuration.getContainerName()).exec();
+        }
+    }
+
     public static void main(String[] args) throws LifecycleException {
         ArtemisDockerDeployableContainer container = new ArtemisDockerDeployableContainer();
         ArtemisDockerContainerConfiguration containerConfiguration = new ArtemisDockerContainerConfiguration();
@@ -219,9 +235,10 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
         containerConfiguration.setContainerLogs("/home/jboss/broker/log/artemis.log,/home/jboss/broker/etc/broker.xml");
         container.setup(containerConfiguration);
         container.start();
-        container.startBroker();
+        container.startBroker(true);
         String coreConnectUrl = container.getCoreConnectUrl();
         container.stopBroker();
+        container.startBroker(false);
         container.stop();
     }
 
