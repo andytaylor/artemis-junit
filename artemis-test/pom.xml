@@ -71,7 +71,6 @@
                            <goal>create</goal>
                         </goals>
                         <configuration>
-                           <host>localhost</host>
                            <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
                            <instance>target/standalone</instance>
                         </configuration>
