@@ -52,10 +52,10 @@ under the License.
       <journal-pool-files>10</journal-pool-files>
 
       <journal-file-size>10M</journal-file-size>
-            <!--
-        You can verify the network health of a particular NIC by specifying the <network-check-NIC> element.
-         <network-check-NIC>theNicName</network-check-NIC>
-        -->
+      <!--
+  You can verify the network health of a particular NIC by specifying the <network-check-NIC> element.
+   <network-check-NIC>theNicName</network-check-NIC>
+  -->
 
       <!--
         Use this to use an HTTP server to validate the network
@@ -77,8 +77,6 @@ under the License.
 
       <!-- use this to customize the ping used for ipv6 addresses -->
       <!-- <network-check-ping6-command>ping6 -c 1 %2$s</network-check-ping6-command> -->
-
-
 
 
       <!-- how often we are looking for how many bytes are being used on the disk in ms -->
@@ -114,19 +112,27 @@ under the License.
          <!-- amqpLowCredits: The server will send the # credits specified at amqpCredits at this low mark -->
 
          <!-- Acceptor for every supported protocol -->
-         <acceptor name="artemis">tcp://${standalone_host}:61616?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;useEpoll=true;amqpCredits=1000;amqpLowCredits=300</acceptor>
+         <acceptor name="artemis">
+            tcp://${standalone_host}:61616?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;useEpoll=true;amqpCredits=1000;amqpLowCredits=300
+         </acceptor>
 
          <!-- AMQP Acceptor.  Listens on default AMQP port for AMQP traffic.-->
-         <acceptor name="amqp">tcp://${standalone_host}:5672?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=AMQP;useEpoll=true;amqpCredits=1000;amqpMinCredits=300</acceptor>
+         <acceptor name="amqp">
+            tcp://${standalone_host}:5672?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=AMQP;useEpoll=true;amqpCredits=1000;amqpMinCredits=300
+         </acceptor>
 
          <!-- STOMP Acceptor. -->
-         <acceptor name="stomp">tcp://${standalone_host}:61613?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=STOMP;useEpoll=true</acceptor>
+         <acceptor name="stomp">
+            tcp://${standalone_host}:61613?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=STOMP;useEpoll=true
+         </acceptor>
 
          <!-- HornetQ Compatibility Acceptor.  Enables HornetQ Core and STOMP for legacy HornetQ clients. -->
          <acceptor name="hornetq">tcp://${standalone_host}:5445?protocols=HORNETQ,STOMP;useEpoll=true</acceptor>
 
          <!-- MQTT Acceptor -->
-         <acceptor name="mqtt">tcp://${standalone_host}:1883?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=MQTT;useEpoll=true</acceptor>
+         <acceptor name="mqtt">
+            tcp://${standalone_host}:1883?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=MQTT;useEpoll=true
+         </acceptor>
 
       </acceptors>
 
@@ -181,12 +187,12 @@ under the License.
       <addresses>
          <address name="DLQ">
             <anycast>
-               <queue name="DLQ" />
+               <queue name="DLQ"/>
             </anycast>
          </address>
          <address name="ExpiryQueue">
             <anycast>
-               <queue name="ExpiryQueue" />
+               <queue name="ExpiryQueue"/>
             </anycast>
          </address>
 

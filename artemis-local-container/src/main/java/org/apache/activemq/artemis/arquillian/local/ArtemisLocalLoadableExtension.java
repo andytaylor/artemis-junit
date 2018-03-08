@@ -25,10 +25,10 @@ import org.jboss.arquillian.test.spi.enricher.resource.ResourceProvider;
 
 
 public class ArtemisLocalLoadableExtension implements LoadableExtension {
-    public void register(ExtensionBuilder builder) {
-        builder.service(DeployableContainer.class, ArtemisLocalDeployableContainer.class);
-        builder.service(Protocol.class, ArtemisProtocol.class);
-        builder.service(ResourceProvider.class, ArtemisControllerProvider.class);
-        builder.observer(ArtemisContainerControllerCreator.class);
-    }
+   public void register(ExtensionBuilder builder) {
+      builder.service(DeployableContainer.class, ArtemisLocalDeployableContainer.class);
+      builder.service(Protocol.class, ArtemisProtocol.class);
+      builder.service(ResourceProvider.class, ArtemisControllerProvider.class);
+      builder.observer(ArtemisContainerControllerCreator.class);
+   }
 }

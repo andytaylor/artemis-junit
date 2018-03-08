@@ -102,21 +102,21 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
       broker.destroy();
    }
 
-    @Override
-    public void stopBroker(boolean wait) {
-       File absoluteHome = new File(containerConfiguration.getArtemisHome());
-       try {
-          Process broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "stop");
-          if (wait) {
-             broker.waitFor();
-          }
-       } catch (Exception e) {
-          throw new IllegalStateException("unable to start broker", e);
-       }
-    }
+   @Override
+   public void stopBroker(boolean wait) {
+      File absoluteHome = new File(containerConfiguration.getArtemisHome());
+      try {
+         Process broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "stop");
+         if (wait) {
+            broker.waitFor();
+         }
+      } catch (Exception e) {
+         throw new IllegalStateException("unable to start broker", e);
+      }
+   }
 
-    public static void copyFile(File sourceFile, File destFile) throws IOException {
-      if(!destFile.exists()) {
+   public static void copyFile(File sourceFile, File destFile) throws IOException {
+      if (!destFile.exists()) {
          destFile.createNewFile();
       }
 
@@ -127,12 +127,11 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
          source = new FileInputStream(sourceFile).getChannel();
          destination = new FileOutputStream(destFile).getChannel();
          destination.transferFrom(source, 0, source.size());
-      }
-      finally {
-         if(source != null) {
+      } finally {
+         if (source != null) {
             source.close();
          }
-         if(destination != null) {
+         if (destination != null) {
             destination.close();
          }
       }

@@ -25,10 +25,10 @@ import org.jboss.arquillian.test.spi.enricher.resource.ResourceProvider;
 
 
 public class ArtemisDockerLoadableExtension implements LoadableExtension {
-    public void register(ExtensionBuilder builder) {
-        builder.service(DeployableContainer.class, ArtemisDockerDeployableContainer.class);
-        builder.service(Protocol.class, ArtemisDockerProtocol.class);
-        builder.service(ResourceProvider.class, ArtemisControllerProvider.class);
-        builder.observer(ArtemisContainerControllerCreator.class);
-    }
+   public void register(ExtensionBuilder builder) {
+      builder.service(DeployableContainer.class, ArtemisDockerDeployableContainer.class);
+      builder.service(Protocol.class, ArtemisDockerProtocol.class);
+      builder.service(ResourceProvider.class, ArtemisControllerProvider.class);
+      builder.observer(ArtemisContainerControllerCreator.class);
+   }
 }

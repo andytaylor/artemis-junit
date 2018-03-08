@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <arquillian xmlns="http://jboss.com/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-<defaultProtocol type="artemis local"/>
-    <group qualifier="replicated" default="true">
-        <container qualifier="live1" >
-            <configuration>
-                <property name="artemisHome">target/live1</property>
-            </configuration>
-        </container>
+   <defaultProtocol type="artemis local"/>
+   <group qualifier="replicated" default="true">
+      <container qualifier="live1">
+         <configuration>
+            <property name="artemisHome">target/live1</property>
+         </configuration>
+      </container>
 
-        <container qualifier="live2">
-            <configuration>
-                <property name="artemisHome">target/live2</property>
-            </configuration>
-        </container>
+      <container qualifier="live2">
+         <configuration>
+            <property name="artemisHome">target/live2</property>
+         </configuration>
+      </container>
 
-        <container qualifier="live3">
-            <configuration>
-                <property name="artemisHome">target/live3</property>
-            </configuration>
-        </container>
+      <container qualifier="live3">
+         <configuration>
+            <property name="artemisHome">target/live3</property>
+         </configuration>
+      </container>
 
-        <container qualifier="replica1">
-            <configuration>
-                <property name="artemisHome">target/replica1</property>
-            </configuration>
-        </container>
+      <container qualifier="replica1">
+         <configuration>
+            <property name="artemisHome">target/replica1</property>
+         </configuration>
+      </container>
 
-        <container qualifier="replica2">
-            <configuration>
-                <property name="artemisHome">target/replica2</property>
-            </configuration>
-        </container>
+      <container qualifier="replica2">
+         <configuration>
+            <property name="artemisHome">target/replica2</property>
+         </configuration>
+      </container>
 
-        <container qualifier="replica3">
-            <configuration>
-                <property name="artemisHome">target/replica3</property>
-            </configuration>
-        </container>
-    </group>
+      <container qualifier="replica3">
+         <configuration>
+            <property name="artemisHome">target/replica3</property>
+         </configuration>
+      </container>
+   </group>
 </arquillian>
 

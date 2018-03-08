@@ -28,14 +28,14 @@ import org.jboss.arquillian.test.spi.event.suite.BeforeSuite;
  * @author <a href="mailto:andy.taylor@jboss.org">Andy Taylor</a>
  */
 public class ArtemisContainerControllerCreator {
-    @Inject
-    @ApplicationScoped
-    private InstanceProducer<ArtemisContainerController> controller;
+   @Inject
+   @ApplicationScoped
+   private InstanceProducer<ArtemisContainerController> controller;
 
-    @Inject
-    private Instance<Injector> injector;
+   @Inject
+   private Instance<Injector> injector;
 
-    public void createContainerSideContainerController(@Observes BeforeSuite event) {
-        controller.set(injector.get().inject(new ArtemisContainerController()));
-    }
+   public void createContainerSideContainerController(@Observes BeforeSuite event) {
+      controller.set(injector.get().inject(new ArtemisContainerController()));
+   }
 }

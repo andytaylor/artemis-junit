@@ -40,22 +40,22 @@ public class ArtemisContainerTest {
 
    @Before
    public void startBroker() throws Exception {
-       BrokerFuture standalone = controller.start("standalone", true);
-       Assert.assertTrue(standalone.awaitBrokerStart(30000));
+      BrokerFuture standalone = controller.start("standalone", true);
+      Assert.assertTrue(standalone.awaitBrokerStart(30000));
    }
 
    @After
    public void stopBroker() {
-        controller.stop("standalone", false);
+      controller.stop("standalone", false);
    }
 
    @Test
    @RunAsClient
    public void shouldWaitForBroker() throws Exception {
-       String standalone = controller.getCoreConnectUrl("standalone");
-       try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(standalone)) {
-           ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
-           Assert.assertNotNull(sessionFactory);
-       }
+      String standalone = controller.getCoreConnectUrl("standalone");
+      try (ServerLocator serverLocator = ActiveMQClient.createServerLocator(standalone)) {
+         ClientSessionFactory sessionFactory = serverLocator.createSessionFactory();
+         Assert.assertNotNull(sessionFactory);
+      }
    }
 }

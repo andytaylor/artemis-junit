@@ -1,11 +1,11 @@
 package org.apache.activemq.artemis.arquillian;
 
 public interface ArtemisDeployableContainer {
-    void startBroker(boolean clean);
+   void startBroker(boolean clean);
 
-    String getCoreConnectUrl();
+   String getCoreConnectUrl();
 
-    void kill();
+   void kill();
 
-    void stopBroker(boolean wait);
+   void stopBroker(boolean wait);
 }

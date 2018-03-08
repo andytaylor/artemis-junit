@@ -70,17 +70,17 @@ public class ArtemisContainerController {
    }
 
    private ArtemisDeployableContainer getArtemisDeployableContainer(String containerQualifier) {
-        ContainerRegistry registry = containerRegistry.get();
-        if (registry == null) {
-            throw new IllegalArgumentException("No container registry in context");
-        }
+      ContainerRegistry registry = containerRegistry.get();
+      if (registry == null) {
+         throw new IllegalArgumentException("No container registry in context");
+      }
 
-        Container container = registry.getContainer(new TargetDescription(containerQualifier));
+      Container container = registry.getContainer(new TargetDescription(containerQualifier));
 
-        if (container == null) {
-            throw new IllegalArgumentException("No container in Registry named " + containerQualifier);
-        }
-        return (ArtemisDeployableContainer) container.getDeployableContainer();
+      if (container == null) {
+         throw new IllegalArgumentException("No container in Registry named " + containerQualifier);
+      }
+      return (ArtemisDeployableContainer) container.getDeployableContainer();
    }
 
    public void createQueue(String testQueue, String... containers) throws Exception {
@@ -95,5 +95,6 @@ public class ArtemisContainerController {
          session.start();
          ClientMessage reply = requestor.request(message);
          System.out.println("reply = " + reply);
-      }}
+      }
+   }
 }

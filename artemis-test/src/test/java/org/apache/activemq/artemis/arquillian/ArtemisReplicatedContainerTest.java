@@ -49,30 +49,30 @@ public class ArtemisReplicatedContainerTest {
    @ArquillianResource
    protected ArtemisContainerController controller;
 
-    @Before
-    public void startBrokers() throws Exception {
-        BrokerFuture live1 = controller.start("live1", true);
-        BrokerFuture live2 = controller.start("live2", true);
-        BrokerFuture live3 = controller.start("live3", true);
-        controller.start("replica1", true);
-        controller.start("replica2", true);
-        controller.start("replica3", true);
-        Assert.assertTrue(live1.awaitBrokerStart(30000));
-        Assert.assertTrue(live2.awaitBrokerStart(30000));
-        Assert.assertTrue(live3.awaitBrokerStart(30000));
-        Assert.assertTrue(awaitCluster(30000));
-        controller.createQueue("testQueue", "live1", "live2", "live3");
-    }
+   @Before
+   public void startBrokers() throws Exception {
+      BrokerFuture live1 = controller.start("live1", true);
+      BrokerFuture live2 = controller.start("live2", true);
+      BrokerFuture live3 = controller.start("live3", true);
+      controller.start("replica1", true);
+      controller.start("replica2", true);
+      controller.start("replica3", true);
+      Assert.assertTrue(live1.awaitBrokerStart(30000));
+      Assert.assertTrue(live2.awaitBrokerStart(30000));
+      Assert.assertTrue(live3.awaitBrokerStart(30000));
+      Assert.assertTrue(awaitCluster(30000));
+      controller.createQueue("testQueue", "live1", "live2", "live3");
+   }
 
-    @After
-    public void stopBrokers() {
-        controller.stop("replica1", false);
-        controller.stop("replica2", false);
-        controller.stop("replica3", false);
-        controller.stop("live1", false);
-        controller.stop("live2", false);
-        controller.stop("live3", false);
-    }
+   @After
+   public void stopBrokers() {
+      controller.stop("replica1", false);
+      controller.stop("replica2", false);
+      controller.stop("replica3", false);
+      controller.stop("live1", false);
+      controller.stop("live2", false);
+      controller.stop("live3", false);
+   }
 
    @Test
    @RunAsClient
@@ -129,7 +129,7 @@ public class ArtemisReplicatedContainerTest {
    }
 
    private int getBackupCount(ServerLocator serverLocator1) {
-       int count = 0;
+      int count = 0;
       Topology t1 = serverLocator1.getTopology();
       Collection<TopologyMemberImpl> members = t1.getMembers();
       for (TopologyMemberImpl member : members) {
