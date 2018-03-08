@@ -37,7 +37,7 @@ public class ArtemisRemoteDeployableContainer implements DeployableContainer<Art
     }
 
     @Override
-    public void stopBroker() {
+    public void stopBroker(boolean wait) {
         execute("stop");
     }
 

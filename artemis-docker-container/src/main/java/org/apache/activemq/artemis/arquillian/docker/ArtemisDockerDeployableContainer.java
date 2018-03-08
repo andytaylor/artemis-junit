@@ -76,7 +76,7 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
     }
 
     @Override
-    public void stopBroker() {
+    public void stopBroker(boolean wait) {
         Container target = getContainer();
         if (!target.getStatus().startsWith("Up")) {
             return;
@@ -237,7 +237,7 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
         container.start();
         container.startBroker(true);
         String coreConnectUrl = container.getCoreConnectUrl();
-        container.stopBroker();
+        container.stopBroker(true);
         container.startBroker(false);
         container.stop();
     }

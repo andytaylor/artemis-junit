@@ -154,6 +154,7 @@
                                 </goals>
                                 <configuration>
                                     <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
+                                    <noWeb>false</noWeb>
                                     <instance>target/live1</instance>
                                     <clustered>true</clustered>
                                     <replicated>true</replicated>
@@ -167,6 +168,7 @@
                                 </goals>
                                 <configuration>
                                     <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
+                                    <noWeb>false</noWeb>
                                     <instance>target/live2</instance>
                                     <clustered>true</clustered>
                                     <replicated>true</replicated>
@@ -181,6 +183,7 @@
                                 </goals>
                                 <configuration>
                                     <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
+                                    <noWeb>false</noWeb>
                                     <instance>target/live3</instance>
                                     <clustered>true</clustered>
                                     <replicated>true</replicated>
@@ -195,10 +198,11 @@
                                 </goals>
                                 <configuration>
                                     <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
+                                    <noWeb>false</noWeb>
                                     <instance>target/replica1</instance>
                                     <clustered>true</clustered>
                                     <replicated>true</replicated>
-                                    <slave></slave>
+                                    <slave>true</slave>
                                     <portOffset>300</portOffset>
                                 </configuration>
                             </execution>
@@ -210,10 +214,11 @@
                                 </goals>
                                 <configuration>
                                     <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
+                                    <noWeb>false</noWeb>
                                     <instance>target/replica2</instance>
                                     <clustered>true</clustered>
                                     <replicated>true</replicated>
-                                    <slave></slave>
+                                    <slave>true</slave>
                                     <portOffset>400</portOffset>
                                 </configuration>
                             </execution>
@@ -225,10 +230,11 @@
                                 </goals>
                                 <configuration>
                                     <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
+                                    <noWeb>false</noWeb>
                                     <instance>target/replica3</instance>
                                     <clustered>true</clustered>
                                     <replicated>true</replicated>
-                                    <slave></slave>
+                                    <slave>true</slave>
                                     <portOffset>500</portOffset>
                                 </configuration>
                             </execution>

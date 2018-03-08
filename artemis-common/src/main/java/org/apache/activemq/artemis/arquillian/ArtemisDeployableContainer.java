@@ -7,5 +7,5 @@ public interface ArtemisDeployableContainer {
 
     void kill();
 
-    void stopBroker();
+    void stopBroker(boolean wait);
 }

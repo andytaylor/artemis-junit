@@ -46,7 +46,7 @@ public class ArtemisContainerTest {
 
    @After
    public void stopBroker() {
-        controller.stop("standalone");
+        controller.stop("standalone", false);
    }
 
    @Test

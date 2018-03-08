@@ -78,6 +78,7 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
 
    public void stop() throws LifecycleException {
       broker.destroy();
+      System.out.println("****************** Destroying Broker Process ********************");
    }
 
    public ProtocolDescription getDefaultProtocol() {
@@ -102,10 +103,13 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
    }
 
     @Override
-    public void stopBroker() {
+    public void stopBroker(boolean wait) {
        File absoluteHome = new File(containerConfiguration.getArtemisHome());
        try {
-          broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "stop");
+          Process broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "stop");
+          if (wait) {
+             broker.waitFor();
+          }
        } catch (Exception e) {
           throw new IllegalStateException("unable to start broker", e);
        }
