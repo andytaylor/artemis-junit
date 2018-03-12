@@ -61,23 +61,6 @@
                   </executions>
                </plugin>
                <plugin>
-                  <groupId>org.apache.activemq</groupId>
-                  <artifactId>artemis-maven-plugin</artifactId>
-                  <executions>
-                     <execution>
-                        <id>create</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <instance>target/standalone</instance>
-                        </configuration>
-                     </execution>
-                  </executions>
-               </plugin>
-               <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-surefire-plugin</artifactId>
                   <configuration>
@@ -142,104 +125,6 @@
                   </executions>
                </plugin>
                <plugin>
-                  <groupId>org.apache.activemq</groupId>
-                  <artifactId>artemis-maven-plugin</artifactId>
-                  <executions>
-                     <execution>
-                        <id>createlive1</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <noWeb>false</noWeb>
-                           <instance>target/live1</instance>
-                           <clustered>true</clustered>
-                           <replicated>true</replicated>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>createlive2</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <noWeb>false</noWeb>
-                           <instance>target/live2</instance>
-                           <clustered>true</clustered>
-                           <replicated>true</replicated>
-                           <portOffset>100</portOffset>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>createlive3</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <noWeb>false</noWeb>
-                           <instance>target/live3</instance>
-                           <clustered>true</clustered>
-                           <replicated>true</replicated>
-                           <portOffset>200</portOffset>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>createReplica1</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <noWeb>false</noWeb>
-                           <instance>target/replica1</instance>
-                           <clustered>true</clustered>
-                           <replicated>true</replicated>
-                           <slave>true</slave>
-                           <portOffset>300</portOffset>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>createReplica2</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <noWeb>false</noWeb>
-                           <instance>target/replica2</instance>
-                           <clustered>true</clustered>
-                           <replicated>true</replicated>
-                           <slave>true</slave>
-                           <portOffset>400</portOffset>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>createReplica3</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                           <goal>create</goal>
-                        </goals>
-                        <configuration>
-                           <home>target/apache-artemis-2.5.0-SNAPSHOT</home>
-                           <noWeb>false</noWeb>
-                           <instance>target/replica3</instance>
-                           <clustered>true</clustered>
-                           <replicated>true</replicated>
-                           <slave>true</slave>
-                           <portOffset>500</portOffset>
-                        </configuration>
-                     </execution>
-                  </executions>
-               </plugin>
-               <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-surefire-plugin</artifactId>
                   <configuration>
@@ -251,6 +136,21 @@
                            <value>arquillian6nodereplicated.xml</value>
                         </property>
                      </systemProperties>
+                     <systemPropertyVariables>
+                        <artemis.home>./target/apache-artemis-2.5.0-SNAPSHOT</artemis.home>
+                        <artemis.live1.instance>./target/live1</artemis.live1.instance>
+                        <artemis.live1.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost --cluster-user cluster-user --cluster-password cluster-password</artemis.live1.createcommand>
+                        <artemis.live2.instance>./target/live2</artemis.live2.instance>
+                        <artemis.live2.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost  --port-offset 100 --cluster-user cluster-user --cluster-password cluster-password</artemis.live2.createcommand>
+                        <artemis.live3.instance>./target/live3</artemis.live3.instance>
+                        <artemis.live3.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost --port-offset 200 --cluster-user cluster-user --cluster-password cluster-password</artemis.live3.createcommand>
+                        <artemis.replica1.instance>./target/replica1</artemis.replica1.instance>
+                        <artemis.replica1.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost  --port-offset 300 --slave --cluster-user cluster-user --cluster-password cluster-password</artemis.replica1.createcommand>
+                        <artemis.replica2.instance>./target/replica2</artemis.replica2.instance>
+                        <artemis.replica2.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost  --port-offset 400 --slave --cluster-user cluster-user --cluster-password cluster-password</artemis.replica2.createcommand>
+                        <artemis.replica3.instance>./target/replica3</artemis.replica3.instance>
+                        <artemis.replica3.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost  --port-offset 500 --slave --cluster-user cluster-user --cluster-password cluster-password</artemis.replica3.createcommand>
+                     </systemPropertyVariables>
                      <argLine></argLine>
                   </configuration>
                </plugin>

@@ -34,8 +34,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,12 +73,12 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
    }
 
    public void start() throws LifecycleException {
-      FileConfigurationParser parser = new FileConfigurationParser();
+      /*FileConfigurationParser parser = new FileConfigurationParser();
       try {
          configuration = parser.parseMainConfig(new FileInputStream(new File(containerConfiguration.getArtemisHome() + "/etc/broker.xml")));
       } catch (Exception e) {
          throw new LifecycleException(e.getMessage(), e.getCause());
-      }
+      }*/
    }
 
    public void stop() throws LifecycleException {
@@ -104,11 +109,11 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
 
    @Override
    public void stopBroker(boolean wait) {
-      File absoluteHome = new File(containerConfiguration.getArtemisHome());
+      File instanceHome = new File(containerConfiguration.getArtemisInstance());
       try {
-         Process broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "stop");
+         ProcessBuilder.build("artemis standalone", instanceHome, false, "stop");
          if (wait) {
-            broker.waitFor();
+            this.broker.waitFor();
          }
       } catch (Exception e) {
          throw new IllegalStateException("unable to start broker", e);
@@ -138,26 +143,48 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
    }
 
    public void startBroker(boolean clean) {
-      File absoluteHome = new File(containerConfiguration.getArtemisHome());
+      File artemisHome = new File(containerConfiguration.getArtemisHome());
+      File instanceHome = new File(containerConfiguration.getArtemisInstance());
       try {
          if (clean) {
-            Path dataDir = Paths.get(containerConfiguration.getArtemisHome() + "/data");
+            Path dataDir = Paths.get(containerConfiguration.getArtemisInstance());
 
-            Files.walkFileTree(dataDir, new SimpleFileVisitor<Path>() {
-               @Override
-               public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                  Files.delete(file);
-                  return FileVisitResult.CONTINUE;
-               }
+            if (dataDir.toFile().exists()) {
+               Files.walkFileTree(dataDir, new SimpleFileVisitor<Path>() {
+                  @Override
+                  public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                     Files.delete(file);
+                     return FileVisitResult.CONTINUE;
+                  }
 
-               @Override
-               public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                  Files.delete(dir);
-                  return FileVisitResult.CONTINUE;
-               }
-            });
+                  @Override
+                  public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                     Files.delete(dir);
+                     return FileVisitResult.CONTINUE;
+                  }
+               });
+            }
+            ArrayList<String> args = new ArrayList<String>();
+            args.add("create");
+            String[] split = containerConfiguration.getArtemisCreateCommand().split(" ");
+            for (String s : split) {
+               args.add(s);
+            }
+            args.add(instanceHome.getAbsolutePath());
+
+            String[] theArgs = new String[args.size()];
+            Process build = ProcessBuilder.build("artemis standalone",
+                  artemisHome,
+                  false,
+                  args.toArray(theArgs));
+            build.waitFor();
          }
-         broker = ProcessBuilder.build("artemis standalone", absoluteHome, false, "run");
+         broker = ProcessBuilder.build("artemis standalone", instanceHome, false, "run");
+         try {
+            initConfiguration();
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
       } catch (Exception e) {
          throw new IllegalStateException("unable to start broker", e);
       }
@@ -194,4 +221,12 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
       }
       return coreConnectUrl;
    }
+
+   private void initConfiguration() throws Exception {
+      if (configuration == null) {
+         FileConfigurationParser parser = new FileConfigurationParser();
+         configuration = parser.parseMainConfig(new FileInputStream(new File(containerConfiguration.getArtemisInstance() + "/etc/broker.xml")));
+      }
+   }
+
 }

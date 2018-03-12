@@ -5,37 +5,49 @@
    <group qualifier="replicated" default="true">
       <container qualifier="live1">
          <configuration>
-            <property name="artemisHome">target/live1</property>
+            <property name="artemisHome">${artemis.home}</property>
+            <property name="artemisInstance">${artemis.live1.instance}</property>
+            <property name="artemisCreateCommand">${artemis.live1.createcommand}</property>
          </configuration>
       </container>
 
       <container qualifier="live2">
          <configuration>
-            <property name="artemisHome">target/live2</property>
+            <property name="artemisHome">${artemis.home}</property>
+            <property name="artemisInstance">${artemis.live2.instance}</property>
+            <property name="artemisCreateCommand">${artemis.live2.createcommand}</property>
          </configuration>
       </container>
 
       <container qualifier="live3">
          <configuration>
-            <property name="artemisHome">target/live3</property>
+            <property name="artemisHome">${artemis.home}</property>
+            <property name="artemisInstance">${artemis.live3.instance}</property>
+            <property name="artemisCreateCommand">${artemis.live3.createcommand}</property>
          </configuration>
       </container>
 
       <container qualifier="replica1">
          <configuration>
-            <property name="artemisHome">target/replica1</property>
+            <property name="artemisHome">${artemis.home}</property>
+            <property name="artemisInstance">${artemis.replica1.instance}</property>
+            <property name="artemisCreateCommand">${artemis.replica1.createcommand}</property>
          </configuration>
       </container>
 
       <container qualifier="replica2">
          <configuration>
-            <property name="artemisHome">target/replica2</property>
+            <property name="artemisHome">${artemis.home}</property>
+            <property name="artemisInstance">${artemis.replica2.instance}</property>
+            <property name="artemisCreateCommand">${artemis.replica2.createcommand}</property>
          </configuration>
       </container>
 
       <container qualifier="replica3">
          <configuration>
-            <property name="artemisHome">target/replica3</property>
+            <property name="artemisHome">${artemis.home}</property>
+            <property name="artemisInstance">${artemis.replica3.instance}</property>
+            <property name="artemisCreateCommand">${artemis.replica3.createcommand}</property>
          </configuration>
       </container>
    </group>

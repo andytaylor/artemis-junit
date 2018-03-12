@@ -4,12 +4,14 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
 import com.github.dockerjava.api.command.InfoCmd;
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import org.apache.activemq.artemis.arquillian.ArtemisDeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
@@ -73,6 +75,18 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
          return;
       }
       dockerClient.killContainerCmd(configuration.getContainerName()).exec();
+      long current = System.currentTimeMillis();
+      InspectContainerResponse exec = dockerClient.inspectContainerCmd(configuration.getContainerName()).exec();
+      Boolean running = exec.getState().getRunning();
+      while (running) {
+         exec = dockerClient.inspectContainerCmd(configuration.getContainerName()).exec();
+         running = exec.getState().getRunning();
+         long now = System.currentTimeMillis() + 30000;
+         if (now > (current + 30000)) {
+            throw new IllegalStateException("container not stopped");
+         }
+      }
+
    }
 
    @Override

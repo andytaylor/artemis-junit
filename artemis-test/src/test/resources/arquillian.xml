@@ -4,8 +4,11 @@
    <defaultProtocol type="artemis local"/>
    <container qualifier="standalone" default="true">
       <configuration>
-         <property name="artemisHome">target/standalone</property>
+         <property name="artemisHome">./target/apache-artemis-2.5.0-SNAPSHOT</property>
+         <property name="artemisInstance">./target/standalone</property>
+         <property name="artemisCreateCommand">--allow-anonymous --user admin --password password</property>
       </configuration>
    </container>
 </arquillian>
+
 

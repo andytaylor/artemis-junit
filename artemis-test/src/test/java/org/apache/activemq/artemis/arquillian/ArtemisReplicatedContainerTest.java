@@ -49,6 +49,8 @@ public class ArtemisReplicatedContainerTest {
    @ArquillianResource
    protected ArtemisContainerController controller;
 
+
+
    @Before
    public void startBrokers() throws Exception {
       BrokerFuture live1 = controller.start("live1", true);
@@ -80,6 +82,7 @@ public class ArtemisReplicatedContainerTest {
       String live1 = controller.getCoreConnectUrl("live1");
       live1 += "?ha=true&retryInterval=1000&retryIntervalMultiplier=1.0&reconnectAttempts=-1";
       try (ServerLocatorInternal locator = (ServerLocatorInternal) ActiveMQClient.createServerLocator(live1)) {
+         locator.setCallTimeout(120000).setCallFailoverTimeout(120000);
          ClientSessionFactoryInternal sessionFactory = (ClientSessionFactoryInternal) locator.createSessionFactory();
          ClientSession session = sessionFactory.createSession();
          ClientProducer producer = session.createProducer("testQueue");
@@ -88,6 +91,7 @@ public class ArtemisReplicatedContainerTest {
             producer.send(message);
          }
          controller.kill("live1");
+         Thread.sleep(10000);
          ClientConsumer consumer = session.createConsumer("testQueue");
          session.start();
          for (int i = 0; i < 100; i++) {
@@ -138,5 +142,24 @@ public class ArtemisReplicatedContainerTest {
          }
       }
       return count;
+   }
+
+   public static void main(String[] args) throws Exception {
+      try (ServerLocatorInternal locator = (ServerLocatorInternal) ActiveMQClient.createServerLocator("tcp://172.17.0.2:61616?ha=true&retryInterval=1000&retryIntervalMultiplier=1.0&reconnectAttempts=-1")) {
+         locator.setCallTimeout(120000).setCallFailoverTimeout(120000);
+         ClientSessionFactoryInternal sessionFactory = (ClientSessionFactoryInternal) locator.createSessionFactory();
+         ClientSession session = sessionFactory.createSession();
+         ClientProducer producer = session.createProducer("testQueue");
+         for (int i = 0; i < 100; i++) {
+            ClientMessage message = session.createMessage(true);
+            producer.send(message);
+         }
+         ClientConsumer consumer = session.createConsumer("testQueue");
+         session.start();
+         for (int i = 0; i < 100; i++) {
+            ClientMessage message = consumer.receive(60000);
+            Assert.assertNotNull(message);
+         }
+      }
    }
 }

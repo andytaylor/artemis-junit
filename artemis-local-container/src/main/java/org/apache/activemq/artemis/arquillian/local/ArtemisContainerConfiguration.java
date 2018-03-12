@@ -22,6 +22,8 @@ import org.jboss.arquillian.container.spi.client.container.ContainerConfiguratio
 public class ArtemisContainerConfiguration implements ContainerConfiguration {
    private String brokerXml;
    private String artemisHome;
+   private String artemisInstance;
+   private String artemisCreateCommand;
 
    public String getArtemisHome() {
       return artemisHome;
@@ -43,5 +45,21 @@ public class ArtemisContainerConfiguration implements ContainerConfiguration {
 
    public void setBrokerXml(String brokerXml) {
       this.brokerXml = brokerXml;
+   }
+
+   public String getArtemisInstance() {
+      return artemisInstance;
+   }
+
+   public void setArtemisInstance(String artemisInstance) {
+      this.artemisInstance = artemisInstance;
+   }
+
+   public String getArtemisCreateCommand() {
+      return artemisCreateCommand;
+   }
+
+   public void setArtemisCreateCommand(String artemisCreateCommand) {
+      this.artemisCreateCommand = artemisCreateCommand;
    }
 }
