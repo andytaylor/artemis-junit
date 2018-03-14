@@ -27,11 +27,19 @@ under the License.
 
      <ha-policy>
         <replication>
-           <master>
-              <check-for-live-server>true</check-for-live-server>
-           </master>
+           <slave>
+              <allow-failback>true</allow-failback>
+           </slave>
         </replication>
      </ha-policy>
+
+      <addresses>
+         <address name="replicatedQueue">
+            <anycast>
+               <queue name="replicatedQueue"/>
+            </anycast>
+         </address>
+      </addresses>
    </core>
 
 </configuration>

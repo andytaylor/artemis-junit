@@ -3,7 +3,6 @@ package org.apache.activemq.artemis.arquillian.docker;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.DockerCmdExecFactory;
-import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.ConflictException;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -11,9 +10,9 @@ import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.command.BuildImageResultCallback;
 import com.github.dockerjava.jaxrs.JerseyDockerCmdExecFactory;
 import org.apache.activemq.artemis.arquillian.ArtemisDeployableContainer;
+import org.apache.activemq.artemis.configuration.XMLUpdater;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
 import org.jboss.arquillian.container.spi.client.container.LifecycleException;
@@ -39,20 +38,30 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
 
    private DockerClient dockerClient;
 
-   public void startBroker(boolean clean) {
+   private XMLUpdater xmlUpdater = new XMLUpdater();
+
+   public void startBroker(boolean clean, File configuration) {
       if (clean) {
          stopAndDeleteContainer();
-         CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(configuration.getImageName())
-               .withName(configuration.getContainerName());
-         if (configuration.getContainerEnv() != null && configuration.getContainerEnv().length() > 0) {
-            String[] strings = configuration.getContainerEnv().split(",");
+         CreateContainerCmd createContainerCmd = dockerClient.createContainerCmd(this.configuration.getImageName())
+               .withName(this.configuration.getContainerName());
+         if (this.configuration.getContainerEnv() != null && this.configuration.getContainerEnv().length() > 0) {
+            String[] strings = this.configuration.getContainerEnv().split(",");
             createContainerCmd.withEnv(strings);
          }
          createContainerCmd.exec();
-         dockerClient.startContainerCmd(configuration.getContainerName()).exec();
-      } else {
-         dockerClient.startContainerCmd(configuration.getContainerName()).exec();
       }
+
+      /*if (configuration != null) {
+         try {
+            getFile("/home/jboss/broker/etc/broker.xml");
+            File brokerXml = new File("./target" + this.configuration.getContainerName() + "/broker.xml");
+            xmlUpdater.updateXml(configuration, brokerXml, brokerXml);
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+      }*/
+      dockerClient.startContainerCmd(this.configuration.getContainerName()).exec();
    }
 
 
@@ -145,25 +154,7 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
          try {
             String[] split = configuration.getContainerLogs().split(",");
             for (String s : split) {
-               InputStream inputStream = dockerClient.copyArchiveFromContainerCmd(configuration.getContainerName(), s).exec();
-               ReadableByteChannel inChannel = Channels.newChannel(inputStream);
-               File file = new File("./target/" + configuration.getContainerName() + "/" + s);
-               file.getParentFile().mkdirs();
-               FileChannel outChannel = new FileOutputStream(file).getChannel();
-               ByteBuffer buffer = ByteBuffer.allocate(1024);
-
-               while (true) {
-                  if (inChannel.read(buffer) == -1) {
-                     break;
-                  }
-
-                  buffer.flip();
-                  outChannel.write(buffer);
-                  buffer.clear();
-               }
-
-               inChannel.close();
-               outChannel.close();
+               getFile(s);
             }
          } catch (IOException e) {
             e.printStackTrace();
@@ -171,6 +162,28 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
       }
       stopAndDeleteContainer();
       System.out.println("*************** stopped container " + configuration.getContainerName() + " ******************");
+   }
+
+   private void getFile(String fileName) throws IOException {
+      InputStream inputStream = dockerClient.copyArchiveFromContainerCmd(configuration.getContainerName(), fileName).exec();
+      ReadableByteChannel inChannel = Channels.newChannel(inputStream);
+      File file = new File("./target/" + configuration.getContainerName() + "/" + fileName);
+      file.getParentFile().mkdirs();
+      FileChannel outChannel = new FileOutputStream(file).getChannel();
+      ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+      while (true) {
+         if (inChannel.read(buffer) == -1) {
+            break;
+         }
+
+         buffer.flip();
+         outChannel.write(buffer);
+         buffer.clear();
+      }
+
+      inChannel.close();
+      outChannel.close();
    }
 
    @Override
@@ -249,10 +262,10 @@ public class ArtemisDockerDeployableContainer implements DeployableContainer<Art
       containerConfiguration.setContainerLogs("/home/jboss/broker/log/artemis.log,/home/jboss/broker/etc/broker.xml");
       container.setup(containerConfiguration);
       container.start();
-      container.startBroker(true);
+      container.startBroker(true, null);
       String coreConnectUrl = container.getCoreConnectUrl();
       container.stopBroker(true);
-      container.startBroker(false);
+      container.startBroker(false, null);
       container.stop();
    }
 

@@ -31,14 +31,16 @@ import org.jboss.arquillian.container.spi.client.deployment.TargetDescription;
 import org.jboss.arquillian.core.api.Instance;
 import org.jboss.arquillian.core.api.annotation.Inject;
 
+import java.io.File;
+
 public class ArtemisContainerController {
 
    @Inject
    private Instance<ContainerRegistry> containerRegistry;
 
-   public BrokerFuture start(String containerQualifier, boolean clean) {
+   public BrokerFuture start(String containerQualifier, boolean clean, File configuration) {
       ArtemisDeployableContainer deployableContainer = getArtemisDeployableContainer(containerQualifier);
-      deployableContainer.startBroker(clean);
+      deployableContainer.startBroker(clean, configuration);
       return timeout -> {
          try {
             String coreConnectUrl = deployableContainer.getCoreConnectUrl();
@@ -95,6 +97,25 @@ public class ArtemisContainerController {
          session.start();
          ClientMessage reply = requestor.request(message);
          System.out.println("reply = " + reply);
+      }
+   }
+
+   public String managementRequest(String container, String resource, String operationName, Object... args) {
+      try {
+
+         String coreConnectUrl = getCoreConnectUrl(container);
+         ServerLocator locator = ActiveMQClient.createServerLocator(coreConnectUrl);
+         ClientSessionFactory sessionFactory = locator.createSessionFactory();
+         ClientSession session = sessionFactory.createSession();
+         ClientRequestor requestor = new ClientRequestor(session, "activemq.management");
+         ClientMessage message = session.createMessage(false);
+         ManagementHelper.putOperationInvocation(message, resource, operationName, args);
+         session.start();
+         ClientMessage reply = requestor.request(message);
+         Object result = ManagementHelper.getResult(reply);
+         return result != null ? result.toString() : null;
+      } catch (Exception e) {
+         return null;
       }
    }
 }

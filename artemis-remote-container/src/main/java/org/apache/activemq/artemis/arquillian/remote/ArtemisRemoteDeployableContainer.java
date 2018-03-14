@@ -10,6 +10,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,7 +22,7 @@ public class ArtemisRemoteDeployableContainer implements DeployableContainer<Art
    private ArtemisRemoteContainerConfiguration artemisRemoteContainerConfiguration;
    private String baseURL;
 
-   public void startBroker(boolean clean) {
+   public void startBroker(boolean clean, File configuration) {
       //todo add clean data dirs
       execute("start");
    }

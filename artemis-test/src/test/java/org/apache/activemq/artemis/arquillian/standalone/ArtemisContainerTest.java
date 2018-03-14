@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.activemq.artemis.arquillian;
+package org.apache.activemq.artemis.arquillian.standalone;
 
 import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
+import org.apache.activemq.artemis.arquillian.ArtemisContainerController;
+import org.apache.activemq.artemis.arquillian.BrokerFuture;
 import org.apache.activemq.artemis.arquillian.categories.Standalone;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -31,6 +33,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
+import javax.annotation.Resource;
+import java.io.File;
+import java.net.URL;
+
 @RunWith(Arquillian.class)
 @Category(Standalone.class)
 public class ArtemisContainerTest {
@@ -40,7 +46,9 @@ public class ArtemisContainerTest {
 
    @Before
    public void startBroker() throws Exception {
-      BrokerFuture standalone = controller.start("standalone", true);
+      URL targetUrl = getClass().getResource("/configs/broker-test-queue.xml");
+      File brokerXml = new File(targetUrl.getFile());
+      BrokerFuture standalone = controller.start("standalone", true, brokerXml);
       Assert.assertTrue(standalone.awaitBrokerStart(30000));
    }
 

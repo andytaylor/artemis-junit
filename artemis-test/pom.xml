@@ -151,7 +151,6 @@
                         <artemis.replica3.instance>./target/replica3</artemis.replica3.instance>
                         <artemis.replica3.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost  --port-offset 500 --slave --cluster-user cluster-user --cluster-password cluster-password</artemis.replica3.createcommand>
                      </systemPropertyVariables>
-                     <argLine></argLine>
                   </configuration>
                </plugin>
                <plugin>

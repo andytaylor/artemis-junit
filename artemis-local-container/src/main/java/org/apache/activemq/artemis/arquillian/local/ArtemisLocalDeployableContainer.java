@@ -19,6 +19,7 @@ package org.apache.activemq.artemis.arquillian.local;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.arquillian.ArtemisDeployableContainer;
 import org.apache.activemq.artemis.cli.process.ProcessBuilder;
+import org.apache.activemq.artemis.configuration.XMLUpdater;
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.deployers.impl.FileConfigurationParser;
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
@@ -47,6 +48,7 @@ import java.util.Set;
 public class ArtemisLocalDeployableContainer implements DeployableContainer<ArtemisContainerConfiguration>, ArtemisDeployableContainer {
 
    private Process broker;
+   private XMLUpdater xmlUpdater = new XMLUpdater();
    private ArtemisContainerConfiguration containerConfiguration;
    private Configuration configuration;
    private String coreConnectUrl;
@@ -82,7 +84,9 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
    }
 
    public void stop() throws LifecycleException {
-      broker.destroy();
+      if (broker != null) {
+         broker.destroy();
+      }
       System.out.println("****************** Destroying Broker Process ********************");
    }
 
@@ -142,7 +146,7 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
       }
    }
 
-   public void startBroker(boolean clean) {
+   public void startBroker(boolean clean, File configuration) {
       File artemisHome = new File(containerConfiguration.getArtemisHome());
       File instanceHome = new File(containerConfiguration.getArtemisInstance());
       try {
@@ -178,6 +182,10 @@ public class ArtemisLocalDeployableContainer implements DeployableContainer<Arte
                   false,
                   args.toArray(theArgs));
             build.waitFor();
+         }
+         if (configuration != null) {
+            File brokerXml = new File(instanceHome + "/etc/broker.xml");
+            xmlUpdater.updateXml(configuration, brokerXml, brokerXml);
          }
          broker = ProcessBuilder.build("artemis standalone", instanceHome, false, "run");
          try {

@@ -16,7 +16,7 @@ public class LocalDeployableContainerTest {
       configuration.setArtemisCreateCommand("--allow-anonymous --user admin --password password standalone");
       container.setup(configuration);
       container.start();
-      container.startBroker(true);
+      container.startBroker(true, null);
       container.stopBroker(true);
    }
 

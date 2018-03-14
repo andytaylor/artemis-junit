@@ -1,50 +1,27 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements. See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package org.apache.activemq.artemis.arquillian;
+package org.apache.activemq.artemis.arquillian.base;
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
 import org.apache.activemq.artemis.api.core.client.ClientConsumer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
-import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
-import org.apache.activemq.artemis.arquillian.categories.Replicated6Node;
-import org.apache.activemq.artemis.arquillian.categories.Standalone;
+import org.apache.activemq.artemis.arquillian.ArtemisContainerController;
+import org.apache.activemq.artemis.arquillian.BrokerFuture;
 import org.apache.activemq.artemis.core.client.impl.ClientSessionFactoryInternal;
 import org.apache.activemq.artemis.core.client.impl.ServerLocatorInternal;
 import org.apache.activemq.artemis.core.client.impl.Topology;
 import org.apache.activemq.artemis.core.client.impl.TopologyMemberImpl;
-import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Collection;
 
-@RunWith(Arquillian.class)
-@Category(Replicated6Node.class)
-public class ArtemisReplicatedContainerTest {
+public abstract class ReplicatedTestBase {
 
    @ArquillianResource
    protected ArtemisContainerController controller;
@@ -53,17 +30,16 @@ public class ArtemisReplicatedContainerTest {
 
    @Before
    public void startBrokers() throws Exception {
-      BrokerFuture live1 = controller.start("live1", true);
-      BrokerFuture live2 = controller.start("live2", true);
-      BrokerFuture live3 = controller.start("live3", true);
-      controller.start("replica1", true);
-      controller.start("replica2", true);
-      controller.start("replica3", true);
-      Assert.assertTrue(live1.awaitBrokerStart(30000));
-      Assert.assertTrue(live2.awaitBrokerStart(30000));
-      Assert.assertTrue(live3.awaitBrokerStart(30000));
-      Assert.assertTrue(awaitCluster(30000));
-      controller.createQueue("testQueue", "live1", "live2", "live3");
+      BrokerFuture live1 = controller.start("live1", true, getLiveBrokerFile(getLiveBrokerConfig()));
+      controller.start("replica1", true, getBackupBrokerFile(getBackupBrokerConfig()));
+      Assert.assertTrue(awaitTopology("live1", 30000, 2));
+      BrokerFuture live2 = controller.start("live2", true, getLiveBrokerFile(getLiveBrokerConfig()));
+      controller.start("replica2", true, getBackupBrokerFile(getBackupBrokerConfig()));
+      Assert.assertTrue(awaitTopology("live1", 30000, 4));
+      BrokerFuture live3 = controller.start("live3", true, getLiveBrokerFile(getLiveBrokerConfig()));
+      controller.start("replica3", true, getBackupBrokerFile(getBackupBrokerConfig()));
+      Assert.assertTrue(awaitTopology("live1", 30000, 6));
+      //controller.createQueue("testQueue", "live1", "live2", "live3");
    }
 
    @After
@@ -76,32 +52,27 @@ public class ArtemisReplicatedContainerTest {
       controller.stop("live3", false);
    }
 
-   @Test
-   @RunAsClient
-   public void simpleKill() throws Exception {
-      String live1 = controller.getCoreConnectUrl("live1");
-      live1 += "?ha=true&retryInterval=1000&retryIntervalMultiplier=1.0&reconnectAttempts=-1";
-      try (ServerLocatorInternal locator = (ServerLocatorInternal) ActiveMQClient.createServerLocator(live1)) {
-         locator.setCallTimeout(120000).setCallFailoverTimeout(120000);
-         ClientSessionFactoryInternal sessionFactory = (ClientSessionFactoryInternal) locator.createSessionFactory();
-         ClientSession session = sessionFactory.createSession();
-         ClientProducer producer = session.createProducer("testQueue");
-         for (int i = 0; i < 100; i++) {
-            ClientMessage message = session.createMessage(true);
-            producer.send(message);
-         }
-         controller.kill("live1");
-         Thread.sleep(10000);
-         ClientConsumer consumer = session.createConsumer("testQueue");
-         session.start();
-         for (int i = 0; i < 100; i++) {
-            ClientMessage message = consumer.receive(60000);
-            Assert.assertNotNull(message);
-         }
+   public abstract String getLiveBrokerConfig();
+
+   public abstract String getBackupBrokerConfig();
+
+   public File getLiveBrokerFile(String config) {
+      if (config != null) {
+         URL targetUrl = getClass().getResource(config);
+         return new File(targetUrl.getFile());
       }
+      return null;
    }
 
-   private boolean awaitCluster(long timeout) throws Exception {
+   public File getBackupBrokerFile(String config) {
+      if (config != null) {
+         URL targetUrl = getClass().getResource(config);
+         return new File(targetUrl.getFile());
+      }
+      return null;
+   }
+
+   protected boolean awaitCluster(long timeout) throws Exception {
       String live1 = controller.getCoreConnectUrl("live1");
       String live2 = controller.getCoreConnectUrl("live2");
       String live3 = controller.getCoreConnectUrl("live3");
@@ -132,6 +103,46 @@ public class ArtemisReplicatedContainerTest {
       return false;
    }
 
+   private boolean awaitTopology(String broker, long timeout, int nodes) throws Exception {
+      String live1 = controller.getCoreConnectUrl(broker);
+      live1+= "?retryInterval=1000&retryIntervalMultiplier=1.0&initialConnectAttempts=25";
+      long start = System.currentTimeMillis();
+      do {
+         try  {
+            ServerLocatorInternal serverLocator1 = (ServerLocatorInternal) ActiveMQClient.createServerLocator(live1);
+
+            serverLocator1.connect();
+
+            int backupCount = 0;
+
+
+            backupCount += getNodeCount(serverLocator1);
+            if (backupCount == nodes) {
+               return true;
+            }
+            Thread.sleep(10);
+         }
+         catch(Exception e) {
+            Thread.sleep(10);
+         }
+      } while (System.currentTimeMillis() - start < timeout);
+
+      return false;
+   }
+
+   private int getNodeCount(ServerLocator serverLocator1) {
+      int count = 0;
+      Topology t1 = serverLocator1.getTopology();
+      Collection<TopologyMemberImpl> members = t1.getMembers();
+      for (TopologyMemberImpl member : members) {
+         count++;
+         if (member.getBackup() != null) {
+            count++;
+         }
+      }
+      return count;
+   }
+
    private int getBackupCount(ServerLocator serverLocator1) {
       int count = 0;
       Topology t1 = serverLocator1.getTopology();
@@ -143,6 +154,7 @@ public class ArtemisReplicatedContainerTest {
       }
       return count;
    }
+
 
    public static void main(String[] args) throws Exception {
       try (ServerLocatorInternal locator = (ServerLocatorInternal) ActiveMQClient.createServerLocator("tcp://172.17.0.2:61616?ha=true&retryInterval=1000&retryIntervalMultiplier=1.0&reconnectAttempts=-1")) {
