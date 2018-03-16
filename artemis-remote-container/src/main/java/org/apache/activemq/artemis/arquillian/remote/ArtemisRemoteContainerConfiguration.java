@@ -9,6 +9,7 @@ public class ArtemisRemoteContainerConfiguration implements ContainerConfigurati
    private String port;
    private String bootstrapHost;
    private String bootstrapPort;
+   private String artemisCreateCommand;
 
    @Override
    public void validate() throws ConfigurationException {
@@ -45,5 +46,13 @@ public class ArtemisRemoteContainerConfiguration implements ContainerConfigurati
 
    public void setBootstrapPort(String bootStrapPort) {
       this.bootstrapPort = bootStrapPort;
+   }
+
+   public String getArtemisCreateCommand() {
+      return artemisCreateCommand;
+   }
+
+   public void setArtemisCreateCommand(String artemisCreateCommand) {
+      this.artemisCreateCommand = artemisCreateCommand;
    }
 }
