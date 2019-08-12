@@ -36,7 +36,7 @@ public class ArtemisEndpoint {
                            @QueryParam("configuration") String configuration,
                            @QueryParam("artemisCreateCommand") String artemisCreateCommand) {
       try {
-         //not sure why but xml isnt decoded
+         //not sure why but xml isn't decoded
          artemisBootstrapService.start(clean, URLDecoder.decode(configuration, "UTF-8"), artemisCreateCommand);
       } catch (Throwable e) {
          return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();

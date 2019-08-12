@@ -112,7 +112,7 @@ public class BrokerProcess {
             this.broker.waitFor();
          }
       } catch (Exception e) {
-         throw new IllegalStateException("unable to start broker", e);
+         throw new IllegalStateException("unable to stop broker", e);
       }
    }
 

@@ -33,7 +33,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.net.URL;
 
@@ -46,7 +45,7 @@ public class ArtemisContainerTest {
 
    @Before
    public void startBroker() throws Exception {
-      URL targetUrl = getClass().getResource("/configs/broker-test-queue.xml");
+      URL targetUrl = getClass().getResource("/standalone/broker-test-queue.xml");
       File brokerXml = new File(targetUrl.getFile());
       BrokerFuture standalone = controller.start("standalone", true, brokerXml);
       Assert.assertTrue(standalone.awaitBrokerStart(30000));

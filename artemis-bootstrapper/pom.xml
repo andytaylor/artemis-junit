@@ -9,7 +9,6 @@
       <version>1.0-SNAPSHOT</version>
    </parent>
    <artifactId>artemis-bootstrapper</artifactId>
-   <name>WildFly Swarm Example</name>
    <version>1.0.0-SNAPSHOT</version>
    <packaging>war</packaging>
 
