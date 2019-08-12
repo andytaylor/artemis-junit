@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -63,13 +64,19 @@ public class BrokerProcess {
                Files.walkFileTree(dataDir, new SimpleFileVisitor<Path>() {
                   @Override
                   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                     Files.delete(file);
+                     try {
+                        Files.delete(file);
+                     } catch (NoSuchFileException ignore) {
+                     }
                      return FileVisitResult.CONTINUE;
                   }
 
                   @Override
                   public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                     Files.delete(dir);
+                     try {
+                        Files.delete(dir);
+                     } catch (NoSuchFileException ignore) {
+                     }
                      return FileVisitResult.CONTINUE;
                   }
                });
