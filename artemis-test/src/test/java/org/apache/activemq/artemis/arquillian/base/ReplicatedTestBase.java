@@ -105,18 +105,20 @@ public abstract class ReplicatedTestBase {
 
    private boolean awaitTopology(String broker, long timeout, int nodes) throws Exception {
       String live1 = controller.getCoreConnectUrl(broker);
-      live1+= "?retryInterval=1000&retryIntervalMultiplier=1.0&initialConnectAttempts=25";
+      live1 += "?retryInterval=1000&retryIntervalMultiplier=1.0&initialConnectAttempts=25";
+      boolean connected = false;
+      ServerLocatorInternal serverLocator1 = null;
       long start = System.currentTimeMillis();
       do {
          try  {
-            ServerLocatorInternal serverLocator1 = (ServerLocatorInternal) ActiveMQClient.createServerLocator(live1);
+            if (!connected) {
+               serverLocator1 = (ServerLocatorInternal) ActiveMQClient.createServerLocator(live1);
+               serverLocator1.connect();
+               connected = true;
+            }
+            // topology is not available immediately after connecting
+            int backupCount = getNodeCount(serverLocator1);
 
-            serverLocator1.connect();
-
-            int backupCount = 0;
-
-
-            backupCount += getNodeCount(serverLocator1);
             if (backupCount == nodes) {
                return true;
             }
