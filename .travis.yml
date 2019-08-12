@@ -1,0 +1,10 @@
+language: java
+jdk:
+  - openjdk11
+  - openjdk8
+cache:
+  directories:
+    - $HOME/.m2
+script:
+  - mvn clean test -Pstandalone-local
+  - mvn clean test -Preplicated-local
