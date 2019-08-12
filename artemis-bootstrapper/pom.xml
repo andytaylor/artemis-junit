@@ -9,12 +9,11 @@
       <version>1.0-SNAPSHOT</version>
    </parent>
    <artifactId>artemis-bootstrapper</artifactId>
-   <name>WildFly Swarm Example</name>
    <version>1.0.0-SNAPSHOT</version>
    <packaging>war</packaging>
 
    <properties>
-      <version.wildfly.swarm>2018.1.0</version.wildfly.swarm>
+      <version.thorntail>2.5.0.Final</version.thorntail>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
       <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -24,9 +23,9 @@
    <dependencyManagement>
       <dependencies>
          <dependency>
-            <groupId>org.wildfly.swarm</groupId>
+            <groupId>io.thorntail</groupId>
             <artifactId>bom-all</artifactId>
-            <version>${version.wildfly.swarm}</version>
+            <version>${version.thorntail}</version>
             <scope>import</scope>
             <type>pom</type>
          </dependency>
@@ -37,9 +36,9 @@
       <finalName>artemis-bootstrapper</finalName>
       <plugins>
          <plugin>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>wildfly-swarm-plugin</artifactId>
-            <version>${version.wildfly.swarm}</version>
+            <groupId>io.thorntail</groupId>
+            <artifactId>thorntail-maven-plugin</artifactId>
+            <version>${version.thorntail}</version>
 
             <executions>
                <execution>
@@ -67,11 +66,11 @@
       </dependency>-->
       <!-- WildFly Swarm Fractions -->
       <dependency>
-         <groupId>org.wildfly.swarm</groupId>
+         <groupId>io.thorntail</groupId>
          <artifactId>jaxrs-multipart</artifactId>
       </dependency>
       <dependency>
-         <groupId>org.wildfly.swarm</groupId>
+         <groupId>io.thorntail</groupId>
          <artifactId>cdi</artifactId>
       </dependency>
       <dependency>

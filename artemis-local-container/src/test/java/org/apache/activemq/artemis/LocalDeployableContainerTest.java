@@ -11,7 +11,7 @@ public class LocalDeployableContainerTest {
    public void testStartBroker() throws Exception {
       ArtemisLocalDeployableContainer container = new ArtemisLocalDeployableContainer();
       ArtemisContainerConfiguration configuration = new ArtemisContainerConfiguration();
-      configuration.setArtemisHome("./target/apache-artemis-2.5.0-SNAPSHOT");
+      configuration.setArtemisHome("./target/apache-artemis-2.10.0-SNAPSHOT");
       configuration.setArtemisInstance("./target/standalone");
       configuration.setArtemisCreateCommand("--allow-anonymous --user admin --password password standalone");
       container.setup(configuration);

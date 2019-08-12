@@ -66,13 +66,9 @@
                   <configuration>
                      <skipTests>false</skipTests>
                      <groups>org.apache.activemq.artemis.arquillian.categories.Standalone</groups>
-                     <systemProperties>
-                        <property>
-                           <name>arquillian.xml</name>
-                           <value>arquillian.xml</value>
-                        </property>
-                     </systemProperties>
-                     <argLine></argLine>
+                     <systemPropertyVariables>
+                        <arquillian.xml>arquillian.xml</arquillian.xml>
+                     </systemPropertyVariables>
                   </configuration>
                </plugin>
                <plugin>
@@ -130,14 +126,9 @@
                   <configuration>
                      <skipTests>false</skipTests>
                      <groups>org.apache.activemq.artemis.arquillian.categories.Replicated6Node</groups>
-                     <systemProperties>
-                        <property>
-                           <name>arquillian.xml</name>
-                           <value>arquillian6nodereplicated.xml</value>
-                        </property>
-                     </systemProperties>
                      <systemPropertyVariables>
-                        <artemis.home>./target/apache-artemis-2.5.0-SNAPSHOT</artemis.home>
+                        <arquillian.xml>arquillian6nodereplicated.xml</arquillian.xml>
+                        <artemis.home>./target/apache-artemis-2.10.0-SNAPSHOT</artemis.home>
                         <artemis.live1.instance>./target/live1</artemis.live1.instance>
                         <artemis.live1.createcommand>--allow-anonymous --user admin --password password --clustered --replicated --host localhost --cluster-user cluster-user --cluster-password cluster-password</artemis.live1.createcommand>
                         <artemis.live2.instance>./target/live2</artemis.live2.instance>
@@ -181,13 +172,8 @@
                   <configuration>
                      <skipTests>false</skipTests>
                      <groups>org.apache.activemq.artemis.arquillian.categories.Standalone</groups>
-                     <systemProperties>
-                        <property>
-                           <name>arquillian.xml</name>
-                           <value>arquillian-remote.xml</value>
-                        </property>
-                     </systemProperties>
                      <systemPropertyVariables>
+                        <arquillian.xml>arquillian-remote.xml</arquillian.xml>
                         <bootstrap.host>localhost</bootstrap.host>
                         <bootstrap.port>8080</bootstrap.port>
                         <standalone.host>localhost</standalone.host>
@@ -224,13 +210,8 @@
                   <configuration>
                      <skipTests>false</skipTests>
                      <groups>org.apache.activemq.artemis.arquillian.categories.Standalone</groups>
-                     <systemProperties>
-                        <property>
-                           <name>arquillian.xml</name>
-                           <value>arquillian-docker.xml</value>
-                        </property>
-                     </systemProperties>
                      <systemPropertyVariables>
+                        <arquillian.xml>arquillian-docker.xml</arquillian.xml>
                         <docker.host>"/var/run/docker.sock"</docker.host>
                         <container.name>standalone</container.name>
                         <image.name>jboss-amq-7/amq71:latest</image.name>
@@ -268,13 +249,8 @@
                   <configuration>
                      <skipTests>false</skipTests>
                      <groups>org.apache.activemq.artemis.arquillian.categories.Replicated6Node</groups>
-                     <systemProperties>
-                        <property>
-                           <name>arquillian.xml</name>
-                           <value>arquillian6nodereplicated-docker.xml</value>
-                        </property>
-                     </systemProperties>
                      <systemPropertyVariables>
+                        <arquillian.xml>arquillian6nodereplicated-docker.xml</arquillian.xml>
                         <docker.host>"/var/run/docker.sock"</docker.host>
                         <container.logs>/home/jboss/broker/log/artemis.log,/home/jboss/broker/etc/broker.xml
                         </container.logs>

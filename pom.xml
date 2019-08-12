@@ -10,8 +10,9 @@
    <version>1.0-SNAPSHOT</version>
 
    <properties>
-      <version.arquillian_core>1.2.1.Final</version.arquillian_core>
-      <version.artemis>2.5.0-SNAPSHOT</version.artemis>
+      <version.arquillian_core>1.4.1.Final</version.arquillian_core>
+      <version.artemis>2.10.0-SNAPSHOT</version.artemis>
+      <version.maven-surefire-plugin>3.0.0-M3</version.maven-surefire-plugin>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
    </properties>
@@ -36,6 +37,7 @@
       <module>artemis-local-container</module>
       <module>artemis-remote-container</module>
       <module>artemis-docker-container</module>
+      <module>artemis-test</module>
    </modules>
 
    <build>
@@ -52,7 +54,7 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.20.1</version>
+            <version>${version.maven-surefire-plugin}</version>
             <configuration>
                <skipTests>true</skipTests>
             </configuration>
