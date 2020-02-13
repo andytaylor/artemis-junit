@@ -1,8 +1,5 @@
 package org.apache.activemq.artemis.test.base;
 
-import org.apache.activemq.artemis.arquillian.ArtemisContainerController;
-import org.apache.activemq.artemis.arquillian.BrokerFuture;
-
 public abstract class ReplicatedTestBase {
   /*
 
