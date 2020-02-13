@@ -1,4 +1,4 @@
-package org.apache.activemq.artemis.arquillian.standalone;
+package org.apache.activemq.artemis.test.standalone;
 
 public class MessageGenerator {
     public static String generateMessage() {

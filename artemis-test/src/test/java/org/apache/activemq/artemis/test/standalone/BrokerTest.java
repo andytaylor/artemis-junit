@@ -1,4 +1,4 @@
-package org.apache.activemq.artemis.arquillian.standalone;
+package org.apache.activemq.artemis.test.standalone;
 
 import org.apache.activemq.artemis.broker.BrokerProcess;
 import org.apache.activemq.artemis.junit.Broker;

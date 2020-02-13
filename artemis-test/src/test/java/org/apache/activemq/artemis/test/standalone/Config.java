@@ -1,4 +1,4 @@
-package org.apache.activemq.artemis.arquillian.standalone;
+package org.apache.activemq.artemis.test.standalone;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

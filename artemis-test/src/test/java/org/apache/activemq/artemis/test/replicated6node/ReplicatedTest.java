@@ -14,19 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.activemq.artemis.arquillian.replicated6node;
+package org.apache.activemq.artemis.test.replicated6node;
 
-import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
-import org.apache.activemq.artemis.api.core.client.ClientConsumer;
-import org.apache.activemq.artemis.api.core.client.ClientMessage;
-import org.apache.activemq.artemis.api.core.client.ClientProducer;
-import org.apache.activemq.artemis.api.core.client.ClientSession;
-import org.apache.activemq.artemis.arquillian.base.ReplicatedTestBase;
-import org.apache.activemq.artemis.arquillian.categories.Replicated6Node;
-import org.apache.activemq.artemis.core.client.impl.ClientSessionFactoryInternal;
-import org.apache.activemq.artemis.core.client.impl.ServerLocatorInternal;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.activemq.artemis.test.base.ReplicatedTestBase;
+import org.apache.activemq.artemis.test.categories.Replicated6Node;
 import org.junit.experimental.categories.Category;
 
 

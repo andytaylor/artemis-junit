@@ -1,24 +1,7 @@
-package org.apache.activemq.artemis.arquillian.base;
+package org.apache.activemq.artemis.test.base;
 
-import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
-import org.apache.activemq.artemis.api.core.client.ClientConsumer;
-import org.apache.activemq.artemis.api.core.client.ClientMessage;
-import org.apache.activemq.artemis.api.core.client.ClientProducer;
-import org.apache.activemq.artemis.api.core.client.ClientSession;
-import org.apache.activemq.artemis.api.core.client.ServerLocator;
 import org.apache.activemq.artemis.arquillian.ArtemisContainerController;
 import org.apache.activemq.artemis.arquillian.BrokerFuture;
-import org.apache.activemq.artemis.core.client.impl.ClientSessionFactoryInternal;
-import org.apache.activemq.artemis.core.client.impl.ServerLocatorInternal;
-import org.apache.activemq.artemis.core.client.impl.Topology;
-import org.apache.activemq.artemis.core.client.impl.TopologyMemberImpl;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Collection;
 
 public abstract class ReplicatedTestBase {
   /*

@@ -1,4 +1,4 @@
-package org.apache.activemq.artemis.arquillian.standalone;
+package org.apache.activemq.artemis.test.standalone;
 
 import org.apache.activemq.artemis.junit.Client;
 import org.apache.activemq.artemis.junit.Result;

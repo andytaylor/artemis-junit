@@ -1,22 +1,8 @@
-package org.apache.activemq.artemis.arquillian.replicated6node;
+package org.apache.activemq.artemis.test.replicated6node;
 
-import org.apache.activemq.artemis.api.core.JsonUtil;
-import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
-import org.apache.activemq.artemis.api.core.client.ClientConsumer;
-import org.apache.activemq.artemis.api.core.client.ClientMessage;
-import org.apache.activemq.artemis.api.core.client.ClientProducer;
-import org.apache.activemq.artemis.api.core.client.ClientSession;
-import org.apache.activemq.artemis.arquillian.base.ReplicatedTestBase;
-import org.apache.activemq.artemis.arquillian.categories.Replicated6Node;
-import org.apache.activemq.artemis.core.client.impl.ClientSessionFactoryInternal;
-import org.apache.activemq.artemis.core.client.impl.ServerLocatorInternal;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.activemq.artemis.test.base.ReplicatedTestBase;
+import org.apache.activemq.artemis.test.categories.Replicated6Node;
 import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-
-import javax.json.JsonArray;
-import javax.json.JsonObject;
 
 @Category(Replicated6Node.class)
 public class ReplicatedFailbackTest extends ReplicatedTestBase {
