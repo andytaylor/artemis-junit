@@ -9,57 +9,20 @@
       <groupId>org.apache.activemq.artemis</groupId>
       <version>1.0-SNAPSHOT</version>
    </parent>
-   <groupId>org.apache.activemq.artemis</groupId>
+
    <artifactId>artemis-local-container</artifactId>
    <version>1.0-SNAPSHOT</version>
    <packaging>jar</packaging>
 
+
    <dependencies>
       <dependency>
          <groupId>org.apache.activemq.artemis</groupId>
-         <artifactId>artemis-common-arquillian</artifactId>
+         <artifactId>artemis-junit-common</artifactId>
          <version>${project.version}</version>
       </dependency>
    </dependencies>
 
-   <build>
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>3.0.2</version>
-            <executions>
-               <execution>
-                  <id>unpack</id>
-                  <phase>test-compile</phase>
-                  <goals>
-                     <goal>unpack</goal>
-                  </goals>
-                  <configuration>
-                     <artifactItems>
-                        <artifactItem>
-                           <groupId>org.apache.activemq</groupId>
-                           <artifactId>apache-artemis</artifactId>
-                           <classifier>bin</classifier>
-                           <version>${version.artemis}</version>
-                           <type>zip</type>
-                           <overWrite>false</overWrite>
-                           <outputDirectory>${project.build.directory}</outputDirectory>
-                        </artifactItem>
-                     </artifactItems>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
 
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-               <skipTests>false</skipTests>
-            </configuration>
-         </plugin>
-      </plugins>
-   </build>
 
 </project>

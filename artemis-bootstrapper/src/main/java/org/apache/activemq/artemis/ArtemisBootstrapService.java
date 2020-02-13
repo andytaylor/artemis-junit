@@ -1,18 +1,9 @@
 package org.apache.activemq.artemis;
 
 import org.apache.activemq.artemis.broker.BrokerProcess;
-import org.apache.activemq.artemis.cli.process.ProcessBuilder;
-import org.apache.activemq.artemis.core.config.Configuration;
-import org.apache.activemq.artemis.core.deployers.impl.FileConfigurationParser;
-import org.jboss.arquillian.container.spi.client.container.LifecycleException;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 
 public class ArtemisBootstrapService {
    BrokerProcess brokerProcess;

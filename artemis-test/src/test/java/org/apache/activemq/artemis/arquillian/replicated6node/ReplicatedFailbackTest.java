@@ -10,8 +10,6 @@ import org.apache.activemq.artemis.arquillian.base.ReplicatedTestBase;
 import org.apache.activemq.artemis.arquillian.categories.Replicated6Node;
 import org.apache.activemq.artemis.core.client.impl.ClientSessionFactoryInternal;
 import org.apache.activemq.artemis.core.client.impl.ServerLocatorInternal;
-import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -19,13 +17,10 @@ import org.junit.runner.RunWith;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonValue;
 
-@RunWith(Arquillian.class)
 @Category(Replicated6Node.class)
 public class ReplicatedFailbackTest extends ReplicatedTestBase {
-   @Test
-   @RunAsClient
+  /* @Test
    public void checkFailback() throws Exception {
       controller.kill("live1");
       String replica1 = controller.getCoreConnectUrl("replica1");
@@ -75,5 +70,5 @@ public class ReplicatedFailbackTest extends ReplicatedTestBase {
    @Override
    public String getBackupBrokerConfig() {
       return "/replicated/broker-allow-failback.xml";
-   }
+   }*/
 }

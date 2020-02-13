@@ -12,7 +12,6 @@ import org.apache.activemq.artemis.core.client.impl.ClientSessionFactoryInternal
 import org.apache.activemq.artemis.core.client.impl.ServerLocatorInternal;
 import org.apache.activemq.artemis.core.client.impl.Topology;
 import org.apache.activemq.artemis.core.client.impl.TopologyMemberImpl;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,11 +21,7 @@ import java.net.URL;
 import java.util.Collection;
 
 public abstract class ReplicatedTestBase {
-
-   @ArquillianResource
-   protected ArtemisContainerController controller;
-
-
+  /*
 
    @Before
    public void startBrokers() throws Exception {
@@ -173,5 +168,5 @@ public abstract class ReplicatedTestBase {
             Assert.assertNotNull(message);
          }
       }
-   }
+   }*/
 }
