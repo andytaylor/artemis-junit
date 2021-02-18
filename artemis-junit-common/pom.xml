@@ -16,7 +16,7 @@
    <properties>
       <env.qpidjms.version>0.48.0</env.qpidjms.version>
       <env.slf4j.version>1.7.28</env.slf4j.version>
-      <env.jackson.version>2.10.2</env.jackson.version>
+      <env.jackson.version>2.10.5.1</env.jackson.version>
    </properties>
 
    <dependencies>
